@@ -1,11 +1,7 @@
-## My Project
+## aws-cloudformation-resource-providers-ec2-ni
 
-TODO: Fill this README out!
+The CloudFormation Resource Provider Package For Network Insights
 
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
 
 ## Security
 
