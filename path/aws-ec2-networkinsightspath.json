@@ -1,0 +1,160 @@
+{
+  "typeName": "AWS::EC2::NetworkInsightsPath",
+  "description": "Resource schema for AWS::EC2::NetworkInsightsPath",
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-ec2-ni.git",
+  "definitions": {
+    "Tags": {
+      "type": "array",
+      "description": "An array of key-value pairs to apply to this resource.",
+      "minItems": 1,
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/Tag"
+      }
+    },
+    "Tag": {
+      "description": "A key-value pair to associate with a resource.",
+      "type": "object",
+      "properties": {
+        "Key": {
+          "type": "string",
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^(?!aws:.*)[a-z0-9\\s\\_\\.\\/\\=\\+\\-]+$"
+        },
+        "Value": {
+          "type": "string",
+          "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "^(?!aws:.*)[a-z0-9\\s\\_\\.\\/\\=\\+\\-]+$"
+        }
+      },
+      "required": [
+        "Key"
+      ]
+    },
+    "IpAddress": {
+      "type": "string",
+      "maxLength": 15,
+      "pattern": "^([0-9]{1,3}.){3}[0-9]{1,3}$"
+    },
+    "Protocol": {
+      "type": "string",
+      "enum": [
+        "tcp",
+        "udp"
+      ]
+    },
+    "Port": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 65535
+    }
+  },
+  "properties": {
+    "PathId": {
+      "description": "Identifier for the path",
+      "type": "string"
+    },
+    "PathArn": {
+      "description": "Arn for the path",
+      "type": "string"
+    },
+    "CreatedDate": {
+      "description": "Instant at which the path is created",
+      "type": "string"
+    },
+    "SourceIp": {
+      "description": "Source IP address of the path",
+      "$ref": "#/definitions/IpAddress"
+    },
+    "DestinationIp": {
+      "description": "Destination IP address of the path",
+      "$ref": "#/definitions/IpAddress"
+    },
+    "Source": {
+      "type": "string",
+      "description": "Source ARN of the path",
+      "minimum": 20,
+      "maximum": 2048,
+      "pattern": "^([a-z]{1,5}-([a-z0-9]{8}|[a-z0-9]{17}|\\*)$)|arn:(aws|aws-cn|aws-us-gov|aws-iso-{0,1}[a-z]{0,1}):[A-Za-z0-9][A-Za-z0-9_/.-]{0,62}:[A-Za-z0-9_/.-]{0,63}:[A-Za-z0-9_/.-]{0,63}:[A-Za-z0-9][A-Za-z0-9:_/+=,@.-]{0,1023}$"
+    },
+    "Destination": {
+      "type": "string",
+      "description": "Destination ARN of the path",
+      "minimum": 20,
+      "maximum": 2048,
+      "pattern": "^([a-z]{1,5}-([a-z0-9]{8}|[a-z0-9]{17}|\\*)$)|arn:(aws|aws-cn|aws-us-gov|aws-iso-{0,1}[a-z]{0,1}):[A-Za-z0-9][A-Za-z0-9_/.-]{0,62}:[A-Za-z0-9_/.-]{0,63}:[A-Za-z0-9_/.-]{0,63}:[A-Za-z0-9][A-Za-z0-9:_/+=,@.-]{0,1023}$"
+    },
+    "Protocol": {
+      "description": "Protocol use by the path",
+      "$ref": "#/definitions/Protocol"
+    },
+    "DestinationPort": {
+      "description": "Destination port of the path",
+      "$ref": "#/definitions/Port"
+    },
+    "Name": {
+      "type": "string",
+      "description": "Name of the path"
+    },
+    "Description": {
+      "type": "string",
+      "description": "Description of the path"
+    },
+    "Tags": {
+      "type": "array",
+      "description": "The tags for the path",
+      "items": {
+        "$ref": "#/definitions/Tag"
+      }
+    },
+    "IdempotencyToken": {
+      "type": "string",
+      "description": "Token to ensure idempotency",
+      "maximum": 255,
+      "pattern": ".*\\S.*"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "Protocol",
+    "IdempotencyToken"
+  ],
+  "readOnlyProperties": [
+    "/properties/PathId",
+    "/properties/PathArn",
+    "/properties/CreatedDate"
+  ],
+  "primaryIdentifier": [
+    "/properties/PathId"
+  ],
+  "createOnlyProperties": [
+    "/properties/SourceIp",
+    "/properties/DestinationIp",
+    "/properties/Source",
+    "/properties/Destination",
+    "/properties/Protocol",
+    "/properties/DestinationPort",
+    "/properties/Name",
+    "/properties/Description",
+    "/properties/Tags",
+    "/properties/IdempotencyToken"
+  ],
+  "additionalIdentifiers": [
+    [
+      "/properties/PathArn"
+    ]
+  ],
+  "handlers": {
+    "create": {
+      "permissions": []
+    },
+    "delete": {
+      "permissions": []
+    }
+  }
+}
