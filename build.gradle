@@ -1,0 +1,23 @@
+description "AWS CloudFormation Resource Providers - EC2"
+
+allprojects {
+    version "1.0-SNAPSHOT"
+}
+
+task release
+
+// Copy all resource providers to folder `packaging_additional_published_artifacts` for deployment
+def projectsToRelease = ["aws-ec2-networkinsightspath"].collect { project(it) }
+configure(projectsToRelease) {
+    task release(dependsOn: build) {
+        group "build"
+        description "Build the project and copy the RPDK package to brazil"
+        doLast {
+            copy {
+                from "${project.buildDir}/rpdk"
+                into rootProject.file("build/packaging_additional_published_artifacts")
+            }
+        }
+    }
+    rootProject.release.dependsOn(release)
+}

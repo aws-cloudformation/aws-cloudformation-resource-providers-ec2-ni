@@ -1,0 +1,4 @@
+rootProject.name = 'AWSCloudFormationResourceProvidersNetworkInsights'
+
+include 'aws-ec2-networkinsightspath'
+
