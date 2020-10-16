@@ -1,104 +1,152 @@
 {
     "typeName": "AWS::EC2::NetworkInsightsPath",
-    "description": "An example resource schema demonstrating some basic constructs and validation rules.",
-    "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+    "description": "Resource schema for AWS::EC2::NetworkInsightsPath",
+    "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-ec2-ni.git",
     "definitions": {
-        "InitechDateFormat": {
-            "$comment": "Use the `definitions` block to provide shared resource property schemas",
-            "type": "string",
-            "format": "date-time"
+        "Tags": {
+            "type": "array",
+            "description": "An array of key-value pairs to apply to this resource.",
+            "minItems": 1,
+            "maxItems": 20,
+            "uniqueItems": true,
+            "items": {
+                "$ref": "#/definitions/Tag"
+            }
         },
-        "Memo": {
+        "Tag": {
+            "description": "A key-value pair to associate with a resource.",
             "type": "object",
             "properties": {
-                "Heading": {
-                    "type": "string"
+                "Key": {
+                    "type": "string",
+                    "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "pattern": "^(?!aws:.*)[a-z0-9\\s\\_\\.\\/\\=\\+\\-]+$"
                 },
-                "Body": {
-                    "type": "string"
+                "Value": {
+                    "type": "string",
+                    "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+                    "minLength": 1,
+                    "maxLength": 255,
+                    "pattern": "^(?!aws:.*)[a-z0-9\\s\\_\\.\\/\\=\\+\\-]+$"
                 }
             },
-            "additionalProperties": false
+            "required": [
+                "Key"
+            ]
+        },
+        "IpAddress": {
+            "type": "string",
+            "maxLength": 15,
+            "pattern": "^([0-9]{1,3}.){3}[0-9]{1,3}$"
+        },
+        "Protocol": {
+            "type": "string",
+            "enum": [
+                "tcp",
+                "udp"
+            ]
+        },
+        "Port": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535
         }
     },
     "properties": {
-        "TPSCode": {
-            "description": "A TPS Code is automatically generated on creation and assigned as the unique identifier.",
+        "PathId": {
+            "description": "Identifier for the path",
+            "type": "string"
+        },
+        "PathArn": {
+            "description": "Arn for the path",
+            "type": "string"
+        },
+        "CreatedDate": {
+            "description": "Instant at which the path is created",
+            "type": "string"
+        },
+        "SourceIp": {
+            "description": "Source IP address of the path",
+            "$ref": "#/definitions/IpAddress"
+        },
+        "DestinationIp": {
+            "description": "Destination IP address of the path",
+            "$ref": "#/definitions/IpAddress"
+        },
+        "Source": {
             "type": "string",
-            "pattern": "^[A-Z]{3,5}[0-9]{8}-[0-9]{4}$"
+            "description": "Source of the path",
+            "minimum": 20,
+            "maximum": 2048,
+            "pattern": "^([a-z]{1,5}-([a-z0-9]{8}|[a-z0-9]{17}|\\*)$)|arn:(aws|aws-cn|aws-us-gov|aws-iso-{0,1}[a-z]{0,1}):[A-Za-z0-9][A-Za-z0-9_/.-]{0,62}:[A-Za-z0-9_/.-]{0,63}:[A-Za-z0-9_/.-]{0,63}:[A-Za-z0-9][A-Za-z0-9:_/+=,@.-]{0,1023}$"
         },
-        "Title": {
-            "description": "The title of the TPS report is a mandatory element.",
+        "Destination": {
             "type": "string",
-            "minLength": 20,
-            "maxLength": 250
+            "description": "Destination of the path",
+            "minimum": 20,
+            "maximum": 2048,
+            "pattern": "^([a-z]{1,5}-([a-z0-9]{8}|[a-z0-9]{17}|\\*)$)|arn:(aws|aws-cn|aws-us-gov|aws-iso-{0,1}[a-z]{0,1}):[A-Za-z0-9][A-Za-z0-9_/.-]{0,62}:[A-Za-z0-9_/.-]{0,63}:[A-Za-z0-9_/.-]{0,63}:[A-Za-z0-9][A-Za-z0-9:_/+=,@.-]{0,1023}$"
         },
-        "CoverSheetIncluded": {
-            "description": "Required for all TPS Reports submitted after 2/19/1999",
-            "type": "boolean"
+        "Protocol": {
+            "description": "Protocol use by the path",
+            "$ref": "#/definitions/Protocol"
         },
-        "DueDate": {
-            "$ref": "#/definitions/InitechDateFormat"
+        "DestinationPort": {
+            "description": "Destination port of the path",
+            "$ref": "#/definitions/Port"
         },
-        "ApprovalDate": {
-            "$ref": "#/definitions/InitechDateFormat"
-        },
-        "Memo": {
-            "$ref": "#/definitions/Memo"
-        },
-        "SecondCopyOfMemo": {
-            "description": "In case you didn't get the first one.",
-            "$ref": "#/definitions/Memo"
-        },
-        "TestCode": {
+        "Name": {
             "type": "string",
-            "enum": [
-                "NOT_STARTED",
-                "CANCELLED"
-            ]
+            "description": "Name of the path"
         },
-        "Authors": {
+        "Description": {
+            "type": "string",
+            "description": "Description of the path"
+        },
+        "Tags": {
             "type": "array",
+            "description": "The tags for the path",
             "items": {
-                "type": "string"
+                "$ref": "#/definitions/Tag"
             }
         }
     },
     "additionalProperties": false,
     "required": [
-        "TestCode",
-        "Title"
+        "Protocol",
+        "Source",
+        "Destination"
     ],
     "readOnlyProperties": [
-        "/properties/TPSCode"
+        "/properties/PathId",
+        "/properties/PathArn",
+        "/properties/CreatedDate"
     ],
     "primaryIdentifier": [
-        "/properties/TPSCode"
+        "/properties/PathId"
+    ],
+    "createOnlyProperties": [
+        "/properties/SourceIp",
+        "/properties/DestinationIp",
+        "/properties/Source",
+        "/properties/Destination",
+        "/properties/Protocol",
+        "/properties/DestinationPort",
+        "/properties/Name",
+        "/properties/Description",
+        "/properties/Tags"
+    ],
+    "additionalIdentifiers": [
+        [
+            "/properties/PathArn"
+        ]
     ],
     "handlers": {
         "create": {
             "permissions": [
-                "initech:CreateReport"
-            ]
-        },
-        "read": {
-            "permissions": [
-                "initech:DescribeReport"
-            ]
-        },
-        "update": {
-            "permissions": [
-                "initech:UpdateReport"
-            ]
-        },
-        "delete": {
-            "permissions": [
-                "initech:DeleteReport"
-            ]
-        },
-        "list": {
-            "permissions": [
-                "initech:ListReports"
+                "ec2:CreateNetworkInsightsPath"
             ]
         }
     }
