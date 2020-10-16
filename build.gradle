@@ -7,7 +7,7 @@ allprojects {
 task release
 
 // Copy all resource providers to folder `packaging_additional_published_artifacts` for deployment
-def projectsToRelease = ["aws-ec2-networkinsightspath"].collect { project(it) }
+def projectsToRelease = ["aws-ec2-networkinsightspath", "aws-ec2-networkinsightsanalysis"].collect { project(it) }
 configure(projectsToRelease) {
     task release(dependsOn: build) {
         group "build"
