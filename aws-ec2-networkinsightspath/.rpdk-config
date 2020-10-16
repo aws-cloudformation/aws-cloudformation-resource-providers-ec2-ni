@@ -1,0 +1,17 @@
+{
+    "typeName": "AWS::EC2::NetworkInsightsPath",
+    "language": "java",
+    "runtime": "java8",
+    "entrypoint": "software.amazon.ec2.networkinsightspath.HandlerWrapper::handleRequest",
+    "testEntrypoint": "software.amazon.ec2.networkinsightspath.HandlerWrapper::testEntrypoint",
+    "settings": {
+        "namespace": [
+            "software",
+            "amazon",
+            "ec2",
+            "networkinsightspath"
+        ],
+        "codegen_template_path": "guided_aws",
+        "protocolVersion": "2.0.0"
+    }
+}
