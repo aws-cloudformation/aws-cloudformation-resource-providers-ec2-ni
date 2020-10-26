@@ -1,0 +1,6 @@
+{
+  "Source": "{{NetworkInsightsPathSource}}",
+  "Destination": "{{NetworkInsightsPathDestination}}",
+  "Protocol": "UDP",
+  "NetworkInsightsPathId": "nip-1234"
+}

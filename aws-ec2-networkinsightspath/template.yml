@@ -4,7 +4,7 @@ Description: AWS SAM template for the AWS::EC2::NetworkInsightsPath resource typ
 
 Globals:
   Function:
-    Timeout: 180  # docker start-up times can be long for SAM CLI
+    Timeout: 120  # docker start-up times can be long for SAM CLI
     MemorySize: 256
 
 Resources:
@@ -21,4 +21,3 @@ Resources:
       Handler: software.amazon.ec2.networkinsightspath.HandlerWrapper::testEntrypoint
       Runtime: java8
       CodeUri: ./target/aws-ec2-networkinsightspath-1.0.jar
-

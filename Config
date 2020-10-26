@@ -29,7 +29,7 @@ package.AWSCloudFormationResourceProvidersNetworkInsights = {
   dependencies = {
     1.0 = {
       AWSCloudFormationRPDKJavaPlugin = 2.0;
-      # Your SDK here, e.g. AwsJavaSdk-Ses = 2.0;
+      AwsJavaSdk-Ec2 = 2.0;
     };
   };
 

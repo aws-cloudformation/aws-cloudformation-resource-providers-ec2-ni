@@ -22,14 +22,14 @@
                     "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
                     "minLength": 1,
                     "maxLength": 128,
-                    "pattern": "^(?!aws:.*)[a-z0-9\\s\\_\\.\\/\\=\\+\\-]+$"
+                    "pattern": "^(?!aws:.*)[a-zA-Z0-9\\s\\_\\.\\/\\=\\+\\-]+$"
                 },
                 "Value": {
                     "type": "string",
                     "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
                     "minLength": 1,
                     "maxLength": 255,
-                    "pattern": "^(?!aws:.*)[a-z0-9\\s\\_\\.\\/\\=\\+\\-]+$"
+                    "pattern": "^(?!aws:.*)[a-zA-Z0-9\\s\\_\\.\\/\\=\\+\\-]+$"
                 }
             },
             "required": [
@@ -56,11 +56,11 @@
         }
     },
     "properties": {
-        "PathId": {
+        "NetworkInsightsPathId": {
             "description": "Identifier for the path",
             "type": "string"
         },
-        "PathArn": {
+        "NetworkInsightsPathArn": {
             "description": "Arn for the path",
             "type": "string"
         },
@@ -108,6 +108,7 @@
         },
         "Tags": {
             "type": "array",
+            "insertionOrder": false,
             "description": "The tags for the path",
             "items": {
                 "$ref": "#/definitions/Tag"
@@ -121,12 +122,12 @@
         "Destination"
     ],
     "readOnlyProperties": [
-        "/properties/PathId",
-        "/properties/PathArn",
+        "/properties/NetworkInsightsPathId",
+        "/properties/NetworkInsightsPathArn",
         "/properties/CreatedDate"
     ],
     "primaryIdentifier": [
-        "/properties/PathId"
+        "/properties/NetworkInsightsPathId"
     ],
     "createOnlyProperties": [
         "/properties/SourceIp",
@@ -136,18 +137,39 @@
         "/properties/Protocol",
         "/properties/DestinationPort",
         "/properties/Name",
-        "/properties/Description",
-        "/properties/Tags"
+        "/properties/Description"
     ],
     "additionalIdentifiers": [
         [
-            "/properties/PathArn"
+            "/properties/NetworkInsightsPathArn"
         ]
     ],
     "handlers": {
         "create": {
             "permissions": [
                 "ec2:CreateNetworkInsightsPath"
+            ]
+        },
+        "delete": {
+            "permissions": [
+                "ec2:DeleteNetworkInsightsPath"
+            ]
+        },
+        "read": {
+            "permissions": [
+                "ec2:DescribeNetworkInsightsPaths"
+            ]
+        },
+        "list": {
+            "permissions": [
+                "ec2:DescribeNetworkInsightsPaths"
+            ]
+        },
+        "update": {
+            "permissions": [
+                "ec2:DescribeNetworkInsightsPaths",
+                "ec2:CreateTags",
+                "ec2:DeleteTags"
             ]
         }
     }
