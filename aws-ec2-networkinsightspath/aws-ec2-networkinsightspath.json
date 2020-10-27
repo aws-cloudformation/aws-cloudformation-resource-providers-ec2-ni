@@ -44,8 +44,9 @@
         "Protocol": {
             "type": "string",
             "enum": [
-                "tcp",
-                "udp"
+                "TCP",
+                "UDP",
+                "ALL"
             ]
         },
         "Port": {
