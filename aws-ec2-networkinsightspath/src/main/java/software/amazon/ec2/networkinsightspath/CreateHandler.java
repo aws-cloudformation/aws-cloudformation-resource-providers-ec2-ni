@@ -15,11 +15,11 @@ import software.amazon.cloudformation.proxy.ResourceHandlerRequest;
 public class CreateHandler extends BaseHandlerStd {
 
     @Override
-    protected ProgressEvent<ResourceModel, CallbackContext> handleRequest(
-        final AmazonWebServicesClientProxy proxy,
-        final ResourceHandlerRequest<ResourceModel> resourceHandlerRequest,
-        final Ec2Client client,
-        final Logger logger) {
+    protected ProgressEvent<ResourceModel, CallbackContext> handleRequest(final AmazonWebServicesClientProxy proxy,
+                                                                          final ResourceHandlerRequest<ResourceModel>
+                                                                              resourceHandlerRequest,
+                                                                          final Ec2Client client,
+                                                                          final Logger logger) {
         final ResourceModel model = resourceHandlerRequest.getDesiredResourceState();
         logger.log("Desired tags: " + resourceHandlerRequest.getDesiredResourceTags());
         if (hasReadOnlyProperties(model)) {

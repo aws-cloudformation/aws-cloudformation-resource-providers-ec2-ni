@@ -7,12 +7,16 @@ import software.amazon.cloudformation.proxy.Credentials;
 import software.amazon.cloudformation.proxy.LoggerProxy;
 import software.amazon.cloudformation.proxy.ResourceHandlerRequest;
 
+import java.util.function.Supplier;
+
 public class AbstractTestBase {
-    protected static final Credentials MOCK_CREDENTIALS;
+
     protected static final LoggerProxy logger;
 
+    public Credentials credentials = new Credentials("accessKeyId", "secretAccessKey", "sessionToken");;
+    public Supplier<Long> remainingTimeSupplier = () -> 2L;
+
     static {
-        MOCK_CREDENTIALS = new Credentials("accessKey", "secretKey", "token");
         logger = new LoggerProxy();
     }
 
