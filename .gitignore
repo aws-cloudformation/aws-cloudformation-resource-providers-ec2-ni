@@ -2,10 +2,10 @@
 .DS_Store
 ._*
 
-# Maven outputs
+ # Maven outputs
 .classpath
 
-# IntelliJ
+ # IntelliJ
 *.iml
 ../.idea
 out.java
@@ -13,30 +13,32 @@ out/
 .settings
 .project
 
-# auto-generated files
+ # auto-generated files
 target/
+aws-ec2-networkinsightsanalysis.zip
 aws-ec2-networkinsightspath.zip
 
-# our logs
+ # our logs
 rpdk.log*
 ../rpdk.log
 
-# may contain credentials
+ # may contain credentials
 sam-tests/
 
-#gradle
+ #gradle
 .gradle
 ../.gradle
 ../gradlew.bat
 ../gradle/
 ../gradlew
 
-#build
+ #build
 /build
 ../build
 
-#hypothesis
+ #hypothesis
 /.hypothesis
+.hypothesis
 
 ../wrapper
 ../sam-tests/

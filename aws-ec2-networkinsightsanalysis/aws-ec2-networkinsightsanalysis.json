@@ -245,10 +245,6 @@
                     "type": "string",
                     "description": "Represents the Instance identifier of the route"
                 },
-                "localGatewayId": {
-                    "type": "string",
-                    "description": "Represents the LocalGateway identifier of the route"
-                },
                 "NatGatewayId": {
                     "type": "string",
                     "description": "Represents the NatGateway identifier of the route"
