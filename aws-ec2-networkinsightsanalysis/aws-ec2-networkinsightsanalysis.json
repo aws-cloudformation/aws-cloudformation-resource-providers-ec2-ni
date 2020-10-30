@@ -106,6 +106,21 @@
                     "items": {
                         "$ref": "#/definitions/PortRange"
                     }
+                },
+                "Protocol": {
+                    "$ref": "#/definitions/Protocol"
+                },
+                "SourceAddresses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/IpAddress"
+                    }
+                },
+                "SourcePortRanges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PortRange"
+                    }
                 }
             }
         },
@@ -542,7 +557,7 @@
             "description": "Error code returned by the analysis"
         },
         "ErrorMessage": {
-            "type": "integer",
+            "type": "string",
             "description": "Error message returned by the analysis"
         },
         "NetworkPathFound": {
