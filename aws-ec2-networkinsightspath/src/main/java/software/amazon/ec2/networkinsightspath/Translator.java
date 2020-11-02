@@ -94,7 +94,7 @@ public class Translator {
         switch (errorCode) {
             case "NetworkInsightsSource.NotFound":
             case "NetworkInsightsDestination.NotFound":
-            case "MissingParameterException":
+            case "MissingParameter":
             case "InvalidParameterCombination":
             case "InvalidParameterValue":
             case "TagPolicyViolation":

@@ -33,12 +33,10 @@ gradlew
 
  #build
 /build
-../build
 
  #hypothesis
 /.hypothesis
 .hypothesis
 
-../wrapper
-../sam-tests/
+wrapper/
 docs/

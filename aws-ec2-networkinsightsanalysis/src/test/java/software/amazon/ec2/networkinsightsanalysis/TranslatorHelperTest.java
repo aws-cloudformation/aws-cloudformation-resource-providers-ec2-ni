@@ -548,14 +548,14 @@ public class TranslatorHelperTest {
         software.amazon.awssdk.services.ec2.model.LoadBalancerTarget input =
                 software.amazon.awssdk.services.ec2.model.LoadBalancerTarget.builder()
                         .address("address")
-                        .address("az1")
+                        .availabilityZone("az1")
                         .instance(software.amazon.awssdk.services.ec2.model.Component.builder().id("i-1").build())
                         .port(8443)
                         .build();
 
         LoadBalancerTarget expected = LoadBalancerTarget.builder()
                 .address("address")
-                .address("az1")
+                .availabilityZone("az1")
                 .instance(Component.builder().id("i-1").build())
                 .port(8443)
                 .build();

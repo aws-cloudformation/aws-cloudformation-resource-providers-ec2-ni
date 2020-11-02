@@ -150,7 +150,7 @@ public class TranslatorTest {
     @Test
     public void getHandlerErrorGivenMissingParameterExpectInvalidRequestCode() {
         assertEquals(HandlerErrorCode.InvalidRequest,
-            Translator.getHandlerError("MissingParameterException"));
+            Translator.getHandlerError("MissingParameter"));
     }
 
     @Test
