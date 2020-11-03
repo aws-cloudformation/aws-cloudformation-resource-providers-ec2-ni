@@ -1,0 +1,9 @@
+---
+Description: "This template sets up a NetworkInsightsPath with just the required parameters"
+Resources:
+  CanaryPath:
+    Type: AWS::EC2::NetworkInsightsPath
+    Properties:
+      Source: !ImportValue CanarySource
+      Destination: !ImportValue CanaryDestination
+      Protocol: "TCP"

@@ -1,0 +1,12 @@
+---
+Description: "This template is to used to update the stack created using the template with same name and ending with 001"
+Resources:
+  CanaryPath:
+    Type: AWS::EC2::NetworkInsightsPath
+    Properties:
+      Source: !ImportValue CanarySource
+      Destination: !ImportValue CanaryDestination
+      Protocol: "TCP"
+      Tags:
+        - Key: "Name"
+          Value: "Canary"
