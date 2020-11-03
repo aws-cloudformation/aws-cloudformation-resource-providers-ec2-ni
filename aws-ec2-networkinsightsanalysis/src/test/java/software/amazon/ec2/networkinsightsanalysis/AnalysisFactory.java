@@ -32,6 +32,10 @@ public class AnalysisFactory {
         return prefix + "-" + nextId(prefix);
     }
 
+    public static String arrangeNextToken() {
+        return arrangeId("nextToken");
+    }
+
     public static String arrangeAnalysisId() {
         return arrangeId("nia");
     }

@@ -38,6 +38,19 @@ public class Translator {
             .build();
   }
 
+  static DescribeNetworkInsightsAnalysesRequest translateToListRequest(String nextToken) {
+    return DescribeNetworkInsightsAnalysesRequest.builder()
+            .nextToken(nextToken)
+            .build();
+  }
+
+  static List<ResourceModel> translateFromListRequest(DescribeNetworkInsightsAnalysesResponse response) {
+    return response.networkInsightsAnalyses()
+            .stream()
+            .map(Translator::translateFromAnalysisToModel)
+            .collect(Collectors.toList());
+  }
+
   //TODO: Add exceptions for other APIs, and tagging, when implementing those handlers
   static HandlerErrorCode getHandlerError(final String errorCode) {
     switch (errorCode) {
