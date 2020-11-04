@@ -42,16 +42,17 @@ public class ReadHandlerTest extends AbstractTestBase {
     ArgumentCaptor<DescribeNetworkInsightsPathsRequest> describePathCaptor;
 
     private AmazonWebServicesClientProxy proxy;
+    private ReadHandler sut;
 
     @BeforeEach
     public void setup() {
         proxy = new AmazonWebServicesClientProxy(loggerProxy, credentials, remainingTimeSupplier);
+        sut = new ReadHandler();
     }
 
     @Test
     public void handleRequestExpectSuccess() {
         final NetworkInsightsPath path = arrangePath();
-        final ReadHandler sut = new ReadHandler();
         final ResourceModel model = arrangeResourceModel(path.networkInsightsPathId());
         final ResourceModel expectedModel = arrangeResourceModel(path.networkInsightsPathId(), path.networkInsightsPathArn(), path.createdDate().toString());
         final DescribeNetworkInsightsPathsResponse describeResponse = DescribeNetworkInsightsPathsResponse.builder()
@@ -81,7 +82,6 @@ public class ReadHandlerTest extends AbstractTestBase {
         final AwsServiceException exception = arrangeException("NetworkInsightsSource.NotFound");
         doThrow(exception).when(client)
             .describeNetworkInsightsPaths(any(DescribeNetworkInsightsPathsRequest.class));
-        final ReadHandler sut = new ReadHandler();
 
         final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
 

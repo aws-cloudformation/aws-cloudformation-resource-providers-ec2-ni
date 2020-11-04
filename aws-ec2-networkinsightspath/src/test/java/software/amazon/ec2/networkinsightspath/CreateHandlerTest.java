@@ -50,10 +50,12 @@ public class CreateHandlerTest extends AbstractTestBase {
     private ArgumentCaptor<CreateNetworkInsightsPathRequest> requestCaptor;
 
     private AmazonWebServicesClientProxy proxy;
+    private CreateHandler sut;
 
     @BeforeEach
     public void setup() {
         proxy = new AmazonWebServicesClientProxy(loggerProxy, credentials, remainingTimeSupplier);
+        sut = new CreateHandler();
     }
 
     @Test
@@ -61,7 +63,6 @@ public class CreateHandlerTest extends AbstractTestBase {
         final ResourceModel model = PathFactory.arrangeResourceModel();
         model.setNetworkInsightsPathId(arrangePathId());
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
-        final CreateHandler sut = new CreateHandler();
 
         assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
     }
@@ -71,7 +72,6 @@ public class CreateHandlerTest extends AbstractTestBase {
         final ResourceModel model = PathFactory.arrangeResourceModel();
         model.setNetworkInsightsPathArn(arrangePathArn());
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
-        final CreateHandler sut = new CreateHandler();
 
         assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
     }
@@ -81,7 +81,6 @@ public class CreateHandlerTest extends AbstractTestBase {
         final ResourceModel model = PathFactory.arrangeResourceModel();
         model.setCreatedDate(arrangeCreatedDate().toString());
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
-        final CreateHandler sut = new CreateHandler();
 
         assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
     }
@@ -93,7 +92,6 @@ public class CreateHandlerTest extends AbstractTestBase {
         final AwsServiceException exception = arrangeException("NetworkInsightsSource.NotFound");
         doThrow(exception).when(client)
             .createNetworkInsightsPath(any(CreateNetworkInsightsPathRequest.class));
-        final CreateHandler sut = new CreateHandler();
 
         final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
 
@@ -110,7 +108,6 @@ public class CreateHandlerTest extends AbstractTestBase {
         final CreateNetworkInsightsPathResponse createPathResponse = arrangeCreatePathResponse();
         doReturn(createPathResponse).when(client)
             .createNetworkInsightsPath(any(CreateNetworkInsightsPathRequest.class));
-        final CreateHandler sut = new CreateHandler();
 
         final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request,
             client, logger);

@@ -49,16 +49,17 @@ public class UpdateHandlerTest extends AbstractTestBase {
     ArgumentCaptor<DescribeNetworkInsightsPathsRequest> describePathCaptor;
 
     private AmazonWebServicesClientProxy proxy;
+    private UpdateHandler sut;
 
     @BeforeEach
     public void setup() {
         proxy = new AmazonWebServicesClientProxy(loggerProxy, credentials, remainingTimeSupplier);
+        sut = new UpdateHandler();
     }
 
     @Test
     public void handleRequestExpectSuccess() {
         final String pathId = arrangePathId();
-        final UpdateHandler sut = new UpdateHandler();
         final ResourceModel model = arrangeResourceModel(pathId);
         final Tag tagToAdd = Tag.builder()
             .key("Name")
@@ -111,7 +112,6 @@ public class UpdateHandlerTest extends AbstractTestBase {
         final AwsServiceException exception = arrangeException("InvalidNetworkInsightsPathId.NotFound");
         doThrow(exception).when(client)
             .describeNetworkInsightsPaths(any(DescribeNetworkInsightsPathsRequest.class));
-        final UpdateHandler sut = new UpdateHandler();
 
         final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
 

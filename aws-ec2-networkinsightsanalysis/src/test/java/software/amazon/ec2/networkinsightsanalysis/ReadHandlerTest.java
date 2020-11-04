@@ -42,16 +42,17 @@ public class ReadHandlerTest extends AbstractTestBase {
     ArgumentCaptor<DescribeNetworkInsightsAnalysesRequest> describeAnalysisCaptor;
 
     private AmazonWebServicesClientProxy proxy;
+    private ReadHandler sut;
 
     @BeforeEach
     public void setup() {
         proxy = new AmazonWebServicesClientProxy(loggerProxy, credentials, remainingTimeSupplier);
+        sut = new ReadHandler();
     }
 
     @Test
     public void handleRequestExpectSuccess() {
         final NetworkInsightsAnalysis analysis = arrangeAnalysis();
-        final ReadHandler sut = new ReadHandler();
         final ResourceModel expectedModel = arrangeResourceModel(analysis.networkInsightsAnalysisId(),
                 analysis.networkInsightsAnalysisArn(), analysis.startDate().toString(), analysis.statusAsString());
         final DescribeNetworkInsightsAnalysesResponse describeResponse = DescribeNetworkInsightsAnalysesResponse.builder()
@@ -82,7 +83,6 @@ public class ReadHandlerTest extends AbstractTestBase {
         final AwsServiceException exception = arrangeException("MissingParameter");
         doThrow(exception).when(client)
                 .describeNetworkInsightsAnalyses(any(DescribeNetworkInsightsAnalysesRequest.class));
-        final ReadHandler sut = new ReadHandler();
 
         final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
 

@@ -41,10 +41,12 @@ public class ListHandlerTest extends AbstractTestBase {
     ArgumentCaptor<DescribeNetworkInsightsPathsRequest> describePathCaptor;
 
     private AmazonWebServicesClientProxy proxy;
+    private ListHandler sut;
 
     @BeforeEach
     public void setup() {
         proxy = new AmazonWebServicesClientProxy(loggerProxy, credentials, remainingTimeSupplier);
+        sut = new ListHandler();
     }
 
     @Test
@@ -52,7 +54,6 @@ public class ListHandlerTest extends AbstractTestBase {
         final String nextTokenInput = "someToken";
         final String nextTokenOutput = "someOtherToken";
         final NetworkInsightsPath path = arrangePath();
-        final ListHandler sut = new ListHandler();
         final ResourceModel model = arrangeResourceModel();
         final ResourceModel expectedModel = arrangeResourceModel(path.networkInsightsPathId(), path.networkInsightsPathArn(), path.createdDate().toString());
         final DescribeNetworkInsightsPathsResponse describeResponse = DescribeNetworkInsightsPathsResponse.builder()
@@ -85,7 +86,6 @@ public class ListHandlerTest extends AbstractTestBase {
         final AwsServiceException exception = arrangeException("NetworkInsightsSource.NotFound");
         doThrow(exception).when(client)
             .describeNetworkInsightsPaths(any(DescribeNetworkInsightsPathsRequest.class));
-        final ListHandler sut = new ListHandler();
 
         final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
 

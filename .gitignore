@@ -33,6 +33,7 @@ gradlew
 
  #build
 /build
+build/
 
  #hypothesis
 /.hypothesis

@@ -41,10 +41,12 @@ public class ListHandlerTest extends AbstractTestBase {
     ArgumentCaptor<DescribeNetworkInsightsAnalysesRequest> describeAnalysisCaptor;
 
     private AmazonWebServicesClientProxy proxy;
+    private ListHandler sut;
 
     @BeforeEach
     public void setup() {
         proxy = new AmazonWebServicesClientProxy(loggerProxy, credentials, remainingTimeSupplier);
+        sut = new ListHandler();
     }
 
     @Test
@@ -52,7 +54,6 @@ public class ListHandlerTest extends AbstractTestBase {
         final String nextTokenInput = "someToken";
         final String nextTokenOutput = "someOtherToken";
         final NetworkInsightsAnalysis analysis = arrangeAnalysis();
-        final ListHandler sut = new ListHandler();
         final ResourceModel model = arrangeResourceModel();
         final ResourceModel expectedModel = arrangeResourceModel(analysis.networkInsightsAnalysisId(),
                 analysis.networkInsightsAnalysisArn(), analysis.startDate().toString(), analysis.statusAsString());
@@ -86,7 +87,6 @@ public class ListHandlerTest extends AbstractTestBase {
         final AwsServiceException exception = arrangeException("MissingParameter");
         doThrow(exception).when(client)
                 .describeNetworkInsightsAnalyses(any(DescribeNetworkInsightsAnalysesRequest.class));
-        final ListHandler sut = new ListHandler();
 
         final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
 

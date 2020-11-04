@@ -40,16 +40,17 @@ public class DeleteHandlerTest extends AbstractTestBase {
     ArgumentCaptor<DeleteNetworkInsightsPathRequest> requestCaptor;
 
     private AmazonWebServicesClientProxy proxy;
+    private DeleteHandler sut;
 
     @BeforeEach
     public void setup() {
         proxy = new AmazonWebServicesClientProxy(loggerProxy, credentials, remainingTimeSupplier);
+        sut = new DeleteHandler();
     }
 
     @Test
     public void handleRequestExpectSuccess() {
         final String pathId = arrangePathId();
-        final DeleteHandler sut = new DeleteHandler();
         final ResourceModel model = arrangeResourceModel(pathId);
         final ResourceHandlerRequest<ResourceModel> request = ResourceHandlerRequest.<ResourceModel>builder()
             .desiredResourceState(model)
@@ -81,7 +82,6 @@ public class DeleteHandlerTest extends AbstractTestBase {
         final AwsServiceException exception = arrangeException("InvalidNetworkInsightsPathId.NotFound");
         doThrow(exception).when(client)
             .deleteNetworkInsightsPath(any(DeleteNetworkInsightsPathRequest.class));
-        final DeleteHandler sut = new DeleteHandler();
 
         final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
 
