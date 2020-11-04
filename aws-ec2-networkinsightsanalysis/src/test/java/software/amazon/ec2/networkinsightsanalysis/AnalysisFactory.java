@@ -72,6 +72,20 @@ public class AnalysisFactory {
         return false;
     }
 
+    public static String arrangeKey() {
+        return arrangeId("key");
+    }
+
+    public static String arrangeValue() {
+        return arrangeId("value");
+    }
+
+    public static  software.amazon.awssdk.services.ec2.model.Tag arrangeEc2Tag() {
+        return software.amazon.awssdk.services.ec2.model.Tag.builder()
+                .key(arrangeKey())
+                .value(arrangeValue())
+                .build();
+    }
 
     public static ResourceModel arrangeResourceModel() {
         return ResourceModel.builder()

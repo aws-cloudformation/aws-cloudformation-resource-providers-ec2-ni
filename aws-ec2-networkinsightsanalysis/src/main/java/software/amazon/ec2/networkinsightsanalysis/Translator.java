@@ -1,10 +1,13 @@
 package software.amazon.ec2.networkinsightsanalysis;
 
+import software.amazon.awssdk.services.ec2.model.CreateTagsRequest;
 import software.amazon.awssdk.services.ec2.model.DeleteNetworkInsightsAnalysisRequest;
+import software.amazon.awssdk.services.ec2.model.DeleteTagsRequest;
 import software.amazon.awssdk.services.ec2.model.DescribeNetworkInsightsAnalysesRequest;
 import software.amazon.awssdk.services.ec2.model.DescribeNetworkInsightsAnalysesResponse;
 
 import software.amazon.awssdk.services.ec2.model.NetworkInsightsAnalysis;
+import software.amazon.awssdk.services.ec2.model.Tag;
 import software.amazon.cloudformation.proxy.HandlerErrorCode;
 
 import java.util.List;
@@ -51,16 +54,31 @@ public class Translator {
             .collect(Collectors.toList());
   }
 
-  //TODO: Add exceptions for other APIs, and tagging, when implementing those handlers
+  static CreateTagsRequest translateToCreateTagsRequest(List<software.amazon.awssdk.services.ec2.model.Tag> tags, String analysisId) {
+    return CreateTagsRequest.builder()
+            .resources(analysisId)
+            .tags(tags)
+            .build();
+  }
+
+  static DeleteTagsRequest translateToDeleteTagsRequest(List<Tag> tags, String analysisId) {
+    return DeleteTagsRequest.builder()
+            .resources(analysisId)
+            .tags(tags)
+            .build();
+  }
+
+  //TODO: Add exceptions for other start API, when implementing that handler
   static HandlerErrorCode getHandlerError(final String errorCode) {
     switch (errorCode) {
-      // just adding the exceptions thrown by the Delete and Describe API for now
+      // just adding the exceptions thrown by the Delete, Describe, and Tagging APIs for now
       case "MissingParameter":
       case "InvalidParameterValue":
       case "InvalidParameterCombination":
           // including this error as a safety net; we don't expect this to occur as analysis Read/List handlers
           // should only get invoked for valid analysis resources
       case "InvalidNetworkInsightsAnalysisId.Malformed":
+      case "TagPolicyViolation":
         return HandlerErrorCode.InvalidRequest;
       case "RequestLimitExceeded":
       case "Client.RequestLimitExceeded":

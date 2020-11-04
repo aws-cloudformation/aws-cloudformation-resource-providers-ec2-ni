@@ -2,10 +2,13 @@ package software.amazon.ec2.networkinsightsanalysis;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
+import software.amazon.awssdk.services.ec2.model.CreateTagsRequest;
 import software.amazon.awssdk.services.ec2.model.DeleteNetworkInsightsAnalysisRequest;
+import software.amazon.awssdk.services.ec2.model.DeleteTagsRequest;
 import software.amazon.awssdk.services.ec2.model.DescribeNetworkInsightsAnalysesRequest;
 import software.amazon.awssdk.services.ec2.model.DescribeNetworkInsightsAnalysesResponse;
 import software.amazon.awssdk.services.ec2.model.NetworkInsightsAnalysis;
+import software.amazon.awssdk.services.ec2.model.Tag;
 import software.amazon.cloudformation.proxy.HandlerErrorCode;
 import software.amazon.cloudformation.proxy.ResourceHandlerRequest;
 
@@ -13,6 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeAnalysisId;
+import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeEc2Tag;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeNextToken;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeResourceModel;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeDescribeAnalysesRequest;
@@ -89,6 +93,34 @@ public class TranslatorTest {
     }
 
     @Test
+    public void translateToCreateTagsRequestExpectSuccess() {
+        final software.amazon.awssdk.services.ec2.model.Tag tag = arrangeEc2Tag();
+        final String analysisId = arrangeAnalysisId();
+        final CreateTagsRequest expected = CreateTagsRequest.builder()
+                .resources(analysisId)
+                .tags(tag)
+                .build();
+
+        final CreateTagsRequest actual = Translator.translateToCreateTagsRequest(ImmutableList.of(tag), analysisId);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void translateToDeleteTagsRequestExpectSuccess() {
+        final Tag tag = arrangeEc2Tag();
+        final String analysisId = arrangeAnalysisId();
+        final DeleteTagsRequest expected = DeleteTagsRequest.builder()
+                .resources(analysisId)
+                .tags(tag)
+                .build();
+
+        final DeleteTagsRequest actual = Translator.translateToDeleteTagsRequest(ImmutableList.of(tag), analysisId);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void getHandlerErrorGivenMissingParameterExpectInvalidRequestCode() {
         assertEquals(HandlerErrorCode.InvalidRequest,
             Translator.getHandlerError("MissingParameter"));
@@ -110,6 +142,12 @@ public class TranslatorTest {
     public void getHandlerErrorGivenInvalidAnalysisIdMalformedExpectInvalidRequestCode() {
         assertEquals(HandlerErrorCode.InvalidRequest,
                 Translator.getHandlerError("InvalidNetworkInsightsAnalysisId.Malformed"));
+    }
+
+    @Test
+    public void getHandlerErrorGivenTagPolicyViolationExpectInvalidRequestCode() {
+        assertEquals(HandlerErrorCode.InvalidRequest,
+                Translator.getHandlerError("TagPolicyViolation"));
     }
 
     @Test
