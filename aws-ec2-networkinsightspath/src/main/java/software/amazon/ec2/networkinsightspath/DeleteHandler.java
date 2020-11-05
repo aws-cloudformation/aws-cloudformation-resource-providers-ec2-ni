@@ -29,18 +29,17 @@ public class DeleteHandler extends BaseHandlerStd {
                     logger.log("DeletePathResponse: " + deletePathResponse);
                     return deletePathResponse;
                 });
+            logger.log(String.format("%s deleted successfully", model.getPrimaryIdentifier()));
+
+            return ProgressEvent.<ResourceModel, CallbackContext>builder()
+                .resourceModel(null)
+                .status(OperationStatus.SUCCESS)
+                .build();
         } catch (Ec2Exception e) {
             logger.log("Exception: " + e);
 
             return ProgressEvent.defaultFailureHandler(e,
-                Translator.getHandlerError(e.awsErrorDetails().errorCode()));
+                    Translator.getHandlerError(e.awsErrorDetails().errorCode()));
         }
-        logger.log(String.format("%s deleted successfully", model.getPrimaryIdentifier()));
-
-        return ProgressEvent.<ResourceModel, CallbackContext>builder()
-            .resourceModel(null)
-            .status(OperationStatus.SUCCESS)
-            .build();
-
     }
 }

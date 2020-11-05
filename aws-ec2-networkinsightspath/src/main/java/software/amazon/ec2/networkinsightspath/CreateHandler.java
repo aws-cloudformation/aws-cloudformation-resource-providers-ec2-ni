@@ -38,19 +38,20 @@ public class CreateHandler extends BaseHandlerStd {
 
                     return response;
                 });
+
+            final NetworkInsightsPath networkInsightsPath = createNetworkInsightsPathResponse.networkInsightsPath();
+            updateModel(model, networkInsightsPath);
+            logger.log(String.format("%s created successfully", networkInsightsPath.networkInsightsPathId()));
+
+            return ProgressEvent.<ResourceModel, CallbackContext>builder()
+                .resourceModel(model)
+                .status(OperationStatus.SUCCESS)
+                .build();
         } catch (Ec2Exception e) {
             logger.log("Exception: " + e);
             return ProgressEvent.defaultFailureHandler(e,
-                Translator.getHandlerError(e.awsErrorDetails().errorCode()));
+                    Translator.getHandlerError(e.awsErrorDetails().errorCode()));
         }
-        final NetworkInsightsPath networkInsightsPath = createNetworkInsightsPathResponse.networkInsightsPath();
-        updateModel(model, networkInsightsPath);
-        logger.log(String.format("%s created successfully", networkInsightsPath.networkInsightsPathId()));
-
-        return ProgressEvent.<ResourceModel, CallbackContext>builder()
-            .resourceModel(model)
-            .status(OperationStatus.SUCCESS)
-            .build();
     }
 
     private void updateModel(ResourceModel desiredModel,

@@ -30,19 +30,20 @@ public class UpdateHandler extends BaseHandlerStd {
         try {
             verifyResourceExists(resourceHandlerRequest, client, proxy, logger);
             handleTagUpdates(resourceHandlerRequest, client, proxy, logger);
+
+            final ResourceModel updatedModel = resourceHandlerRequest.getDesiredResourceState();
+            logger.log(String.format("%s updated successfully", updatedModel));
+
+            return ProgressEvent.<ResourceModel, CallbackContext>builder()
+                    .resourceModel(updatedModel)
+                    .status(OperationStatus.SUCCESS)
+                    .build();
         } catch (Ec2Exception e) {
             logger.log("Exception: " + e);
 
             return ProgressEvent.defaultFailureHandler(e,
                     Translator.getHandlerError(e.awsErrorDetails().errorCode()));
         }
-        final ResourceModel updatedModel = resourceHandlerRequest.getDesiredResourceState();
-        logger.log(String.format("%s updated successfully", updatedModel));
-
-        return ProgressEvent.<ResourceModel, CallbackContext>builder()
-                .resourceModel(updatedModel)
-                .status(OperationStatus.SUCCESS)
-                .build();
     }
 
     private void verifyResourceExists(ResourceHandlerRequest<ResourceModel> resourceHandlerRequest,
