@@ -1,6 +1,7 @@
 package software.amazon.ec2.networkinsightsanalysis;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.Test;
 import software.amazon.awssdk.services.ec2.model.CreateTagsRequest;
 import software.amazon.awssdk.services.ec2.model.DeleteNetworkInsightsAnalysisRequest;
@@ -8,6 +9,7 @@ import software.amazon.awssdk.services.ec2.model.DeleteTagsRequest;
 import software.amazon.awssdk.services.ec2.model.DescribeNetworkInsightsAnalysesRequest;
 import software.amazon.awssdk.services.ec2.model.DescribeNetworkInsightsAnalysesResponse;
 import software.amazon.awssdk.services.ec2.model.NetworkInsightsAnalysis;
+import software.amazon.awssdk.services.ec2.model.StartNetworkInsightsAnalysisRequest;
 import software.amazon.awssdk.services.ec2.model.Tag;
 import software.amazon.cloudformation.proxy.HandlerErrorCode;
 import software.amazon.cloudformation.proxy.ResourceHandlerRequest;
@@ -22,8 +24,24 @@ import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrang
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeDescribeAnalysesRequest;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeFullResourceModel;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeNetworkInsightsAnalysis;
+import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeStartAnalysisRequest;
 
 public class TranslatorTest {
+
+    @Test
+    public void translateToStartRequestExpectSuccess() {
+        final ResourceModel resourceModel = arrangeResourceModel();
+        final ResourceHandlerRequest<ResourceModel> resourceHandlerRequest = ResourceHandlerRequest.<ResourceModel>builder()
+                .desiredResourceState(resourceModel)
+                .desiredResourceTags(ImmutableMap.of("someKey", "someValue"))
+                .build();
+        final StartNetworkInsightsAnalysisRequest expected = arrangeStartAnalysisRequest(resourceHandlerRequest);
+
+        final StartNetworkInsightsAnalysisRequest actual =
+                Translator.translateToStartRequest(resourceHandlerRequest);
+
+        assertEquals(expected, actual);
+    }
 
     @Test
     public void translateToReadRequestExpectSuccess() {
@@ -139,6 +157,19 @@ public class TranslatorTest {
     }
 
     @Test
+    public void getHandlerErrorGivenAnalysisLimitExceededExpectInvalidRequestCode() {
+        assertEquals(HandlerErrorCode.InvalidRequest,
+                Translator.getHandlerError("NetworkInsightsAnalysis.LimitExceeded"));
+    }
+
+    @Test
+    public void getHandlerErrorGivenIdempotentParameterMismatchExpectInvalidRequestCode() {
+        assertEquals(HandlerErrorCode.InvalidRequest,
+                Translator.getHandlerError("IdempotentParameterMismatch"));
+    }
+
+
+    @Test
     public void getHandlerErrorGivenInvalidAnalysisIdMalformedExpectInvalidRequestCode() {
         assertEquals(HandlerErrorCode.InvalidRequest,
                 Translator.getHandlerError("InvalidNetworkInsightsAnalysisId.Malformed"));
@@ -163,9 +194,21 @@ public class TranslatorTest {
     }
 
     @Test
+    public void getHandlerErrorGivenPathNotFoundExpectNotFoundCode() {
+        assertEquals(HandlerErrorCode.NotFound,
+                Translator.getHandlerError("InvalidNetworkInsightsPathId.NotFound"));
+    }
+
+    @Test
     public void getHandlerErrorGivenAnalysisNotFoundExpectNotFoundCode() {
         assertEquals(HandlerErrorCode.NotFound,
-            Translator.getHandlerError("InvalidNetworkInsightsAnalysisId.NotFound"));
+                Translator.getHandlerError("InvalidNetworkInsightsAnalysisId.NotFound"));
+    }
+
+    @Test
+    public void getHandlerErrorGivenNetworkInsightsAccessDeniedExpectAccessDeniedCode() {
+        assertEquals(HandlerErrorCode.AccessDenied,
+                Translator.getHandlerError("NetworkInsights.AccessDenied"));
     }
 
     @Test

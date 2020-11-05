@@ -7,13 +7,17 @@ import software.amazon.awssdk.services.ec2.model.DescribeNetworkInsightsAnalyses
 import software.amazon.awssdk.services.ec2.model.DescribeNetworkInsightsAnalysesResponse;
 
 import software.amazon.awssdk.services.ec2.model.NetworkInsightsAnalysis;
+import software.amazon.awssdk.services.ec2.model.StartNetworkInsightsAnalysisRequest;
 import software.amazon.awssdk.services.ec2.model.Tag;
 import software.amazon.cloudformation.proxy.HandlerErrorCode;
+import software.amazon.cloudformation.proxy.ResourceHandlerRequest;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static software.amazon.ec2.networkinsightsanalysis.TagUtils.convertTags;
+import static software.amazon.ec2.networkinsightsanalysis.TagUtils.getTagSpecification;
 
 /**
  * This class is a centralized placeholder for
@@ -23,6 +27,21 @@ import static software.amazon.ec2.networkinsightsanalysis.TagUtils.convertTags;
  */
 
 public class Translator {
+
+  public static StartNetworkInsightsAnalysisRequest translateToStartRequest(ResourceHandlerRequest<ResourceModel> request) {
+    final ResourceModel startAnalysisModel = request.getDesiredResourceState();
+    Map<String, String> desiredTags = request.getDesiredResourceTags();
+    final List<String> filterInArns = startAnalysisModel.getFilterInArns();
+    final StartNetworkInsightsAnalysisRequest.Builder startAnalysisRequestBuilder = StartNetworkInsightsAnalysisRequest
+            .builder().networkInsightsPathId(startAnalysisModel.getNetworkInsightsPathId());
+    if (filterInArns != null && !filterInArns.isEmpty()) {
+      startAnalysisRequestBuilder.filterInArns(filterInArns);
+    }
+    if (desiredTags != null && !desiredTags.isEmpty()) {
+      startAnalysisRequestBuilder.tagSpecifications(getTagSpecification(desiredTags));
+    }
+    return startAnalysisRequestBuilder.build();
+  }
 
   static DescribeNetworkInsightsAnalysesRequest translateToReadRequest(
           final software.amazon.ec2.networkinsightsanalysis.ResourceModel model) {
@@ -68,13 +87,13 @@ public class Translator {
             .build();
   }
 
-  //TODO: Add exceptions for other start API, when implementing that handler
   static HandlerErrorCode getHandlerError(final String errorCode) {
     switch (errorCode) {
-      // just adding the exceptions thrown by the Delete, Describe, and Tagging APIs for now
       case "MissingParameter":
       case "InvalidParameterValue":
       case "InvalidParameterCombination":
+      case "NetworkInsightsAnalysis.LimitExceeded":
+      case "IdempotentParameterMismatch":
           // including this error as a safety net; we don't expect this to occur as analysis Read/List handlers
           // should only get invoked for valid analysis resources
       case "InvalidNetworkInsightsAnalysisId.Malformed":
@@ -83,8 +102,10 @@ public class Translator {
       case "RequestLimitExceeded":
       case "Client.RequestLimitExceeded":
         return HandlerErrorCode.Throttling;
+      case "InvalidNetworkInsightsPathId.NotFound":
       case "InvalidNetworkInsightsAnalysisId.NotFound":
         return HandlerErrorCode.NotFound;
+      case "NetworkInsights.AccessDenied":
       case "UnauthorizedOperation":
       case "Client.UnauthorizedOperation":
         return HandlerErrorCode.AccessDenied;
@@ -96,7 +117,7 @@ public class Translator {
     }
   }
 
-  private static ResourceModel translateFromAnalysisToModel(NetworkInsightsAnalysis analysis) {
+  static ResourceModel translateFromAnalysisToModel(NetworkInsightsAnalysis analysis) {
     return ResourceModel.builder()
             .networkInsightsAnalysisId(analysis.networkInsightsAnalysisId())
             .networkInsightsAnalysisArn(analysis.networkInsightsAnalysisArn())

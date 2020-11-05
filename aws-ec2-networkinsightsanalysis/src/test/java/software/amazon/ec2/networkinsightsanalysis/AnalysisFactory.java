@@ -1,6 +1,8 @@
 package software.amazon.ec2.networkinsightsanalysis;
 
 import com.google.common.collect.ImmutableList;
+import software.amazon.awssdk.services.ec2.model.Component;
+import software.amazon.awssdk.services.ec2.model.Explanation;
 import software.amazon.awssdk.services.ec2.model.StartNetworkInsightsAnalysisRequest;
 import software.amazon.awssdk.services.ec2.model.StartNetworkInsightsAnalysisResponse;
 import software.amazon.awssdk.services.ec2.model.DeleteNetworkInsightsAnalysisRequest;
@@ -15,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static software.amazon.ec2.networkinsightsanalysis.TagUtils.getTagSpecification;
 
 public class AnalysisFactory {
 
@@ -80,6 +84,27 @@ public class AnalysisFactory {
         return arrangeId("value");
     }
 
+    public static Component arrangeComponent() {
+        return Component.builder().id(arrangeId("component")).build();
+    }
+
+    public static List<Explanation> arrangeExplanations() {
+        return ImmutableList.of(
+                software.amazon.awssdk.services.ec2.model.Explanation.builder().vpc(arrangeComponent()).build());
+    }
+
+    public static List<software.amazon.awssdk.services.ec2.model.PathComponent> arrangePathComponents() {
+        return ImmutableList.of(
+                software.amazon.awssdk.services.ec2.model.PathComponent.builder()
+                        .component(arrangeComponent()).build());
+    }
+
+    public static List<software.amazon.awssdk.services.ec2.model.AlternatePathHint> arrangeAlternatePathHints() {
+        return ImmutableList.of(
+                software.amazon.awssdk.services.ec2.model.AlternatePathHint.builder()
+                        .componentId(arrangeId("hint")).build());
+    }
+
     public static  software.amazon.awssdk.services.ec2.model.Tag arrangeEc2Tag() {
         return software.amazon.awssdk.services.ec2.model.Tag.builder()
                 .key(arrangeKey())
@@ -134,12 +159,63 @@ public class AnalysisFactory {
                 .build();
     }
 
+    public static NetworkInsightsAnalysis arrangeAnalysis(final String pathId, final List<String> filterInArns) {
+        return NetworkInsightsAnalysis.builder()
+                .networkInsightsPathId(pathId)
+                .filterInArns(filterInArns)
+                .networkInsightsAnalysisId(arrangeAnalysisId())
+                .networkInsightsAnalysisArn(arrangeAnalysisArn())
+                .startDate(arrangeStartDate())
+                .status(arrangeStatus())
+                .build();
+    }
+
+    public static NetworkInsightsAnalysis arrangeFullAnalysis(final String pathId, final List<String> filterInArns) {
+        return NetworkInsightsAnalysis.builder()
+                .networkInsightsPathId(pathId)
+                .filterInArns(filterInArns)
+                .networkInsightsAnalysisId(arrangeAnalysisId())
+                .networkInsightsAnalysisArn(arrangeAnalysisArn())
+                .startDate(arrangeStartDate())
+                .status(arrangeStatus())
+                .networkPathFound(arrangeNetworkPathFound())
+                .errorCode(arrangeErrorCode())
+                .errorMessage(arrangeErrorMessage())
+                .explanations(arrangeExplanations())
+                .forwardPathComponents(arrangePathComponents())
+                .returnPathComponents(arrangePathComponents())
+                .alternatePathHints(arrangeAlternatePathHints())
+                .build();
+    }
+
+    public static StartNetworkInsightsAnalysisRequest arrangeStartAnalysisRequest(
+            ResourceHandlerRequest<ResourceModel> request) {
+        final ResourceModel startAnalysisModel = request.getDesiredResourceState();
+        final Map<String, String> desiredTags = request.getDesiredResourceTags();
+
+        final StartNetworkInsightsAnalysisRequest.Builder startAnalysisRequestBuilder =
+                StartNetworkInsightsAnalysisRequest.builder()
+                        .networkInsightsPathId(startAnalysisModel.getNetworkInsightsPathId())
+                        .filterInArns(startAnalysisModel.getFilterInArns());
+        if (desiredTags != null && !desiredTags.isEmpty()) {
+            startAnalysisRequestBuilder.tagSpecifications(getTagSpecification(desiredTags));
+        }
+
+        return startAnalysisRequestBuilder.build();
+    }
+
     public static DescribeNetworkInsightsAnalysesRequest arrangeDescribeAnalysesRequest(
             ResourceHandlerRequest<software.amazon.ec2.networkinsightsanalysis.ResourceModel> request) {
         final software.amazon.ec2.networkinsightsanalysis.ResourceModel model = request.getDesiredResourceState();
 
         return DescribeNetworkInsightsAnalysesRequest.builder()
                 .networkInsightsAnalysisIds(model.getNetworkInsightsAnalysisId())
+                .build();
+    }
+
+    public static StartNetworkInsightsAnalysisResponse arrangeStartAnalysisResponse(NetworkInsightsAnalysis analysis) {
+        return StartNetworkInsightsAnalysisResponse.builder()
+                .networkInsightsAnalysis(analysis)
                 .build();
     }
 
