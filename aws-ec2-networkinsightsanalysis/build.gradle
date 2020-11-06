@@ -75,6 +75,9 @@ task cfnPackage(type: Exec) {
 task rpdkPackage(type: Zip) {
     dependsOn cfnPackage
     from zipTree("${resource_name_with_dashes}.zip")
+    from ("${rootDir}/aws-ec2-networkinsightsanalysis") {
+        include "settings.internal.json"
+    }
     destinationDir = file('./build/rpdk')
     archiveName("${resource_name_with_dashes}.zip")
 }
