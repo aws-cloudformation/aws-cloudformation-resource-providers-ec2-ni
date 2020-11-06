@@ -78,6 +78,9 @@ task rpdkPackage(type: Zip) {
     from ("${rootDir}/aws-ec2-networkinsightsanalysis") {
         include "settings.internal.json"
     }
+    from ("${rootDir}/aws-ec2-networkinsightsanalysis") {
+        include "canary-bundle/**/*"
+    }
     destinationDir = file('./build/rpdk')
     archiveName("${resource_name_with_dashes}.zip")
 }
