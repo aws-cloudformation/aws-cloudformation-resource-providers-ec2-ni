@@ -36,9 +36,7 @@ public class Translator {
             .source(createPathModel.getSource())
             .destination(createPathModel.getDestination())
             .protocol(createPathModel.getProtocol())
-            .destinationPort(createPathModel.getDestinationPort())
-            .name(createPathModel.getName())
-            .description(createPathModel.getDescription());
+            .destinationPort(createPathModel.getDestinationPort());
         if (desiredTags != null && !desiredTags.isEmpty()) {
             createPathRequestBuilder.tagSpecifications(getTagSpecification(desiredTags));
         }
@@ -130,9 +128,7 @@ public class Translator {
             .source(path.source())
             .destination(path.destination())
             .protocol(path.protocolAsString())
-            .destinationPort(path.destinationPort())
-            .name(path.name())
-            .description(path.description());
+            .destinationPort(path.destinationPort());
         if (path.tags() != null && !path.tags().isEmpty()) {
             builder.tags(convertTags(path.tags()));
         } else {

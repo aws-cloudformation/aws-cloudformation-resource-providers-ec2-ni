@@ -136,8 +136,6 @@ public class CreateHandlerTest extends AbstractTestBase {
         assertEquals(model.getDestination(), actualRequest.destination());
         assertEquals(model.getSourceIp(), actualRequest.sourceIp());
         assertEquals(model.getDestinationIp(), actualRequest.destinationIp());
-        assertEquals(model.getName(), actualRequest.name());
-        assertEquals(model.getDescription(), actualRequest.description());
         assertEquals(model.getDestinationPort(), actualRequest.destinationPort());
         if (request.getDesiredResourceTags() == null) {
             assertTrue(actualRequest.tagSpecifications().isEmpty());

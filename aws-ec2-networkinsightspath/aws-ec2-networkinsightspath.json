@@ -85,12 +85,6 @@
         "DestinationPort": {
             "$ref": "#/definitions/Port"
         },
-        "Name": {
-            "type": "string"
-        },
-        "Description": {
-            "type": "string"
-        },
         "Tags": {
             "type": "array",
             "insertionOrder": false,
@@ -119,9 +113,7 @@
         "/properties/Source",
         "/properties/Destination",
         "/properties/Protocol",
-        "/properties/DestinationPort",
-        "/properties/Name",
-        "/properties/Description"
+        "/properties/DestinationPort"
     ],
     "additionalIdentifiers": [
         [

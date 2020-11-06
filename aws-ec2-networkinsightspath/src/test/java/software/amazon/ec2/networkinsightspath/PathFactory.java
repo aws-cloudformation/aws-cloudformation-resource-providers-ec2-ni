@@ -77,14 +77,6 @@ public class PathFactory {
         return 1234;
     }
 
-    public static String arrangeName() {
-        return "name";
-    }
-
-    public static String arrangeDescription() {
-        return "description";
-    }
-
     public static String arrangeProtocol() {
         return "TCP";
     }
@@ -122,8 +114,6 @@ public class PathFactory {
             .sourceIp(arrangeSourceIp())
             .destinationIp(arrangeDestinationIp())
             .destinationPort(arrangeDestinationPort())
-            .name(arrangeName())
-            .description(arrangeDescription())
             .tags(ImmutableList.of(arrangeTag()))
             .build();
     }
@@ -174,9 +164,7 @@ public class PathFactory {
             .source(createPathModel.getSource())
             .destination(createPathModel.getDestination())
             .protocol(createPathModel.getProtocol())
-            .destinationPort(createPathModel.getDestinationPort())
-            .name(createPathModel.getName())
-            .description(createPathModel.getDescription());
+            .destinationPort(createPathModel.getDestinationPort());
         if (desiredTags != null && !desiredTags.isEmpty()) {
             createPathRequestBuilder.tagSpecifications(getTagSpecification(desiredTags));
         }
@@ -202,9 +190,7 @@ public class PathFactory {
             .source(model.getSource())
             .destination(model.getDestination())
             .protocol(model.getProtocol())
-            .destinationPort(model.getDestinationPort())
-            .name(model.getName())
-            .description(model.getDescription());
+            .destinationPort(model.getDestinationPort());
         if (model.getTags() != null) {
             builder.tags(model.getTags().stream().map(tag -> Tag.builder()
                 .key(tag.getKey())
