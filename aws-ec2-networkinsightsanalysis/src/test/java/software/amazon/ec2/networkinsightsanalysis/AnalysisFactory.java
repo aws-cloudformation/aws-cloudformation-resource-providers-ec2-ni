@@ -95,6 +95,7 @@ public class AnalysisFactory {
     public static List<software.amazon.awssdk.services.ec2.model.PathComponent> arrangePathComponents() {
         return ImmutableList.of(
                 software.amazon.awssdk.services.ec2.model.PathComponent.builder()
+                        .sequenceNumber(1)
                         .component(arrangeComponent()).build());
     }
 

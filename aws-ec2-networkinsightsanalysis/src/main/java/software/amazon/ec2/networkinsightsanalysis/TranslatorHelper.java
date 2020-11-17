@@ -11,6 +11,7 @@ public class TranslatorHelper {
       return null;
     }
     return software.amazon.ec2.networkinsightsanalysis.PathComponent.builder()
+            .sequenceNumber(pathComponent.sequenceNumber())
             .aclRule(translateAclRule(pathComponent.aclRule()))
             .component(translateComponent(pathComponent.component()))
             .destinationVpc(translateComponent(pathComponent.destinationVpc()))

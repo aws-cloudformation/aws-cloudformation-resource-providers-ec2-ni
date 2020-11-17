@@ -15,6 +15,7 @@ public class TranslatorHelperTest {
     public void translatePathComponentExpectSuccess() {
         software.amazon.awssdk.services.ec2.model.PathComponent input =
                 software.amazon.awssdk.services.ec2.model.PathComponent.builder()
+                        .sequenceNumber(1)
                         .aclRule(software.amazon.awssdk.services.ec2.model.AnalysisAclRule.builder().ruleNumber(1).build())
                         .component(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("comp").build())
                         .destinationVpc(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("dest").build())
@@ -28,6 +29,7 @@ public class TranslatorHelperTest {
                         .build();
 
         PathComponent expected = PathComponent.builder()
+                .sequenceNumber(1)
                 .aclRule(AnalysisAclRule.builder().ruleNumber(1).build())
                 .component(AnalysisComponent.builder().id("comp").build())
                 .destinationVpc(AnalysisComponent.builder().id("dest").build())

@@ -114,6 +114,9 @@
         "PathComponent": {
             "type": "object",
             "properties": {
+                "SequenceNumber": {
+                    "type": "integer"
+                },
                 "AclRule": {
                     "$ref": "#/definitions/AnalysisAclRule"
                 },
