@@ -37,16 +37,16 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeAnalysis;
-import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeErrorCode;
-import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeErrorMessage;
+import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeAnalysisArn;
+import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeAnalysisId;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeFilterInArns;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeFullAnalysis;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeNetworkPathFound;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeStartAnalysisResponse;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeStartDate;
-import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeAnalysisArn;
-import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeAnalysisId;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeStatus;
+import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeStatusMessage;
+
 
 @ExtendWith(MockitoExtension.class)
 public class CreateHandlerTest extends AbstractTestBase {
@@ -105,18 +105,9 @@ public class CreateHandlerTest extends AbstractTestBase {
     }
 
     @Test
-    public void handleRequestGivenErrorCodeExpectThrows() {
+    public void handleRequestGivenStatusMessageExpectThrows() {
         final ResourceModel model = AnalysisFactory.arrangeResourceModel();
-        model.setErrorCode(arrangeErrorCode());
-        final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
-
-        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
-    }
-
-    @Test
-    public void handleRequestGivenErrorMessageExpectThrows() {
-        final ResourceModel model = AnalysisFactory.arrangeResourceModel();
-        model.setErrorMessage(arrangeErrorMessage());
+        model.setStatusMessage(arrangeStatusMessage());
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
 
         assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
@@ -241,8 +232,7 @@ public class CreateHandlerTest extends AbstractTestBase {
         assertNotNull(responseResourceModel.getStartDate());
         assertNotNull(responseResourceModel.getStatus());
         // optional read-only fields
-        assertNotNull(responseResourceModel.getErrorCode());
-        assertNotNull(responseResourceModel.getErrorMessage());
+        assertNotNull(responseResourceModel.getStatusMessage());
         assertNotNull(responseResourceModel.getNetworkPathFound());
         assertNotNull(responseResourceModel.getExplanations());
         assertNotNull(responseResourceModel.getForwardPathComponents());

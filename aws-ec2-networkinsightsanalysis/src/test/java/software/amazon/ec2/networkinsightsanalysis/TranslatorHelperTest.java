@@ -15,29 +15,29 @@ public class TranslatorHelperTest {
     public void translatePathComponentExpectSuccess() {
         software.amazon.awssdk.services.ec2.model.PathComponent input =
                 software.amazon.awssdk.services.ec2.model.PathComponent.builder()
-                        .aclRule(software.amazon.awssdk.services.ec2.model.AclRule.builder().ruleNumber(1).build())
-                        .component(software.amazon.awssdk.services.ec2.model.Component.builder().id("comp").build())
-                        .destinationVpc(software.amazon.awssdk.services.ec2.model.Component.builder().id("dest").build())
-                        .inboundHeader(software.amazon.awssdk.services.ec2.model.Header.builder().destinationAddresses(ImmutableList.of("1.2.3.4")).build())
-                        .outboundHeader(software.amazon.awssdk.services.ec2.model.Header.builder().destinationAddresses(ImmutableList.of("5.6.7.8")).build())
-                        .routeTableRoute(software.amazon.awssdk.services.ec2.model.RouteTableRoute.builder().instanceId("i-1").build())
-                        .securityGroupRule(software.amazon.awssdk.services.ec2.model.SecurityGroupRule.builder().cidr("cidr").build())
-                        .sourceVpc(software.amazon.awssdk.services.ec2.model.Component.builder().id("src").build())
-                        .subnet(software.amazon.awssdk.services.ec2.model.Component.builder().id("subnet").build())
-                        .vpc(software.amazon.awssdk.services.ec2.model.Component.builder().id("vpc").build())
+                        .aclRule(software.amazon.awssdk.services.ec2.model.AnalysisAclRule.builder().ruleNumber(1).build())
+                        .component(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("comp").build())
+                        .destinationVpc(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("dest").build())
+                        .inboundHeader(software.amazon.awssdk.services.ec2.model.AnalysisPacketHeader.builder().destinationAddresses(ImmutableList.of("1.2.3.4")).build())
+                        .outboundHeader(software.amazon.awssdk.services.ec2.model.AnalysisPacketHeader.builder().destinationAddresses(ImmutableList.of("5.6.7.8")).build())
+                        .routeTableRoute(software.amazon.awssdk.services.ec2.model.AnalysisRouteTableRoute.builder().instanceId("i-1").build())
+                        .securityGroupRule(software.amazon.awssdk.services.ec2.model.AnalysisSecurityGroupRule.builder().cidr("cidr").build())
+                        .sourceVpc(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("src").build())
+                        .subnet(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("subnet").build())
+                        .vpc(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("vpc").build())
                         .build();
 
         PathComponent expected = PathComponent.builder()
-                .aclRule(AclRule.builder().ruleNumber(1).build())
-                .component(Component.builder().id("comp").build())
-                .destinationVpc(Component.builder().id("dest").build())
-                .inboundHeader(Header.builder().destinationAddresses(ImmutableList.of("1.2.3.4")).build())
-                .outboundHeader(Header.builder().destinationAddresses(ImmutableList.of("5.6.7.8")).build())
-                .routeTableRoute(RouteTableRoute.builder().instanceId("i-1").build())
-                .securityGroupRule(SecurityGroupRule.builder().cidr("cidr").build())
-                .sourceVpc(Component.builder().id("src").build())
-                .subnet(Component.builder().id("subnet").build())
-                .vpc(Component.builder().id("vpc").build())
+                .aclRule(AnalysisAclRule.builder().ruleNumber(1).build())
+                .component(AnalysisComponent.builder().id("comp").build())
+                .destinationVpc(AnalysisComponent.builder().id("dest").build())
+                .inboundHeader(AnalysisPacketHeader.builder().destinationAddresses(ImmutableList.of("1.2.3.4")).build())
+                .outboundHeader(AnalysisPacketHeader.builder().destinationAddresses(ImmutableList.of("5.6.7.8")).build())
+                .routeTableRoute(AnalysisRouteTableRoute.builder().instanceId("i-1").build())
+                .securityGroupRule(AnalysisSecurityGroupRule.builder().cidr("cidr").build())
+                .sourceVpc(AnalysisComponent.builder().id("src").build())
+                .subnet(AnalysisComponent.builder().id("subnet").build())
+                .vpc(AnalysisComponent.builder().id("vpc").build())
                 .build();
 
         PathComponent actual = TranslatorHelper.translatePathComponent(input);
@@ -66,131 +66,131 @@ public class TranslatorHelperTest {
     public void translateExplanationExpectSuccess() {
         software.amazon.awssdk.services.ec2.model.Explanation input =
                 software.amazon.awssdk.services.ec2.model.Explanation.builder()
-                        .acl(software.amazon.awssdk.services.ec2.model.Component.builder().id("acl-id").build())
-                        .aclRule(software.amazon.awssdk.services.ec2.model.AclRule.builder().ruleNumber(1).build())
+                        .acl(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("acl-id").build())
+                        .aclRule(software.amazon.awssdk.services.ec2.model.AnalysisAclRule.builder().ruleNumber(1).build())
                         .address("1.2.3.4")
                         .addresses(ImmutableList.of("1.2.3.4", "4.3.2.1"))
                         .attachedTo(
-                                software.amazon.awssdk.services.ec2.model.Component.builder().id("attached-id").build())
+                                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("attached-id").build())
                         .availabilityZones(ImmutableList.of("us-test-1a", "us-test-2b"))
                         .cidrs(ImmutableList.of("cidr1", "cidr2"))
                         .classicLoadBalancerListener(
-                                software.amazon.awssdk.services.ec2.model.LoadBalancerListener.builder()
+                                software.amazon.awssdk.services.ec2.model.AnalysisLoadBalancerListener.builder()
                                         .loadBalancerPort(2).build())
-                        .component(software.amazon.awssdk.services.ec2.model.Component.builder().id("comp-id").build())
+                        .component(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("comp-id").build())
                         .customerGateway(
-                                software.amazon.awssdk.services.ec2.model.Component.builder().id("cgw-id").build())
+                                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("cgw-id").build())
                         .destination(
-                                software.amazon.awssdk.services.ec2.model.Component.builder().id("dest-id").build())
+                                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("dest-id").build())
                         .destinationVpc(
-                                software.amazon.awssdk.services.ec2.model.Component.builder().id("dest-vpc").build())
+                                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("dest-vpc").build())
                         .direction("direction")
                         .elasticLoadBalancerListener(
-                                software.amazon.awssdk.services.ec2.model.Component.builder().id("elb-listener")
+                                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("elb-listener")
                                         .build())
                         .explanationCode("explanation-code")
                         .ingressRouteTable(
-                                software.amazon.awssdk.services.ec2.model.Component.builder().id("rtb-id").build())
+                                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("rtb-id").build())
                         .internetGateway(
-                                software.amazon.awssdk.services.ec2.model.Component.builder().id("igw-id").build())
+                                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("igw-id").build())
                         .loadBalancerArn("elb-arn")
                         .loadBalancerListenerPort(3)
                         .loadBalancerTarget(
-                                software.amazon.awssdk.services.ec2.model.LoadBalancerTarget.builder().port(4).build())
+                                software.amazon.awssdk.services.ec2.model.AnalysisLoadBalancerTarget.builder().port(4).build())
                         .loadBalancerTargetGroup(
-                                software.amazon.awssdk.services.ec2.model.Component.builder().id("lb-target-group-1")
+                                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("lb-target-group-1")
                                         .build())
                         .loadBalancerTargetGroups(ImmutableList.of(
-                                software.amazon.awssdk.services.ec2.model.Component.builder().id("lb-target-group-1")
+                                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("lb-target-group-1")
                                         .build(),
-                                software.amazon.awssdk.services.ec2.model.Component.builder().id("lb-target-group-2")
+                                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("lb-target-group-2")
                                         .build()))
                         .loadBalancerTargetPort(5)
                         .missingComponent("missing-comp")
-                        .natGateway(software.amazon.awssdk.services.ec2.model.Component.builder().id("ngw-id").build())
-                        .networkInterface(software.amazon.awssdk.services.ec2.model.Component.builder().id("eni-id")
+                        .natGateway(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("ngw-id").build())
+                        .networkInterface(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("eni-id")
                                 .build())
                         .packetField("packet-field")
                         .port(6)
                         .portRanges(ImmutableList.of(
                                 software.amazon.awssdk.services.ec2.model.PortRange.builder().from(7).build(),
                                 software.amazon.awssdk.services.ec2.model.PortRange.builder().from(8).build()))
-                        .prefixList(software.amazon.awssdk.services.ec2.model.Component.builder().id("prefix-list-id")
+                        .prefixList(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("prefix-list-id")
                                 .build())
                         .protocols(ImmutableList.of(Protocol.UDP, Protocol.TCP))
-                        .routeTable(software.amazon.awssdk.services.ec2.model.Component.builder().id("rtb-id").build())
-                        .routeTableRoute(software.amazon.awssdk.services.ec2.model.RouteTableRoute.builder()
+                        .routeTable(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("rtb-id").build())
+                        .routeTableRoute(software.amazon.awssdk.services.ec2.model.AnalysisRouteTableRoute.builder()
                                 .origin("origin").build())
-                        .securityGroup(software.amazon.awssdk.services.ec2.model.Component.builder().id("sg-1").build())
-                        .securityGroupRule(software.amazon.awssdk.services.ec2.model.SecurityGroupRule.builder()
+                        .securityGroup(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("sg-1").build())
+                        .securityGroupRule(software.amazon.awssdk.services.ec2.model.AnalysisSecurityGroupRule.builder()
                                 .cidr("cidr").build())
                         .securityGroups(ImmutableList.of(
-                                software.amazon.awssdk.services.ec2.model.Component.builder().id("sg-1").build(),
-                                software.amazon.awssdk.services.ec2.model.Component.builder().id("sg-2").build()))
-                        .sourceVpc(software.amazon.awssdk.services.ec2.model.Component.builder().id("src-vpc").build())
+                                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("sg-1").build(),
+                                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("sg-2").build()))
+                        .sourceVpc(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("src-vpc").build())
                         .state("state")
-                        .subnet(software.amazon.awssdk.services.ec2.model.Component.builder().id("subnet-id").build())
-                        .subnetRouteTable(software.amazon.awssdk.services.ec2.model.Component.builder().id("subnet-rtb")
+                        .subnet(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("subnet-id").build())
+                        .subnetRouteTable(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("subnet-rtb")
                                 .build())
-                        .vpc(software.amazon.awssdk.services.ec2.model.Component.builder().id("vpc-id").build())
-                        .vpcEndpoint(software.amazon.awssdk.services.ec2.model.Component.builder().id("vpc-endpoint")
+                        .vpc(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("vpc-id").build())
+                        .vpcEndpoint(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("vpc-endpoint")
                                 .build())
-                        .vpcPeeringConnection(software.amazon.awssdk.services.ec2.model.Component.builder().id("pcx-id")
+                        .vpcPeeringConnection(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("pcx-id")
                                 .build())
-                        .vpnConnection(software.amazon.awssdk.services.ec2.model.Component.builder().id("vpnc-id")
+                        .vpnConnection(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("vpnc-id")
                                 .build())
-                        .vpnGateway(software.amazon.awssdk.services.ec2.model.Component.builder().id("vgw-id").build())
+                        .vpnGateway(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("vgw-id").build())
                         .build();
 
         Explanation expected = Explanation.builder()
-                .acl(Component.builder().id("acl-id").build())
-                .aclRule(AclRule.builder().ruleNumber(1).build())
+                .acl(AnalysisComponent.builder().id("acl-id").build())
+                .aclRule(AnalysisAclRule.builder().ruleNumber(1).build())
                 .address("1.2.3.4")
                 .addresses(ImmutableList.of("1.2.3.4", "4.3.2.1"))
-                .attachedTo(Component.builder().id("attached-id").build())
+                .attachedTo(AnalysisComponent.builder().id("attached-id").build())
                 .availabilityZones(ImmutableList.of("us-test-1a", "us-test-2b"))
                 .cidrs(ImmutableList.of("cidr1", "cidr2"))
-                .classicLoadBalancerListener(LoadBalancerListener.builder().loadBalancerPort(2).build())
-                .component(Component.builder().id("comp-id").build())
-                .customerGateway(Component.builder().id("cgw-id").build())
-                .destination(Component.builder().id("dest-id").build())
-                .destinationVpc(Component.builder().id("dest-vpc").build())
+                .classicLoadBalancerListener(AnalysisLoadBalancerListener.builder().loadBalancerPort(2).build())
+                .component(AnalysisComponent.builder().id("comp-id").build())
+                .customerGateway(AnalysisComponent.builder().id("cgw-id").build())
+                .destination(AnalysisComponent.builder().id("dest-id").build())
+                .destinationVpc(AnalysisComponent.builder().id("dest-vpc").build())
                 .direction("direction")
-                .elasticLoadBalancerListener(Component.builder().id("elb-listener").build())
+                .elasticLoadBalancerListener(AnalysisComponent.builder().id("elb-listener").build())
                 .explanationCode("explanation-code")
-                .ingressRouteTable(Component.builder().id("rtb-id").build())
-                .internetGateway(Component.builder().id("igw-id").build())
+                .ingressRouteTable(AnalysisComponent.builder().id("rtb-id").build())
+                .internetGateway(AnalysisComponent.builder().id("igw-id").build())
                 .loadBalancerArn("elb-arn")
                 .loadBalancerListenerPort(3)
-                .loadBalancerTarget(LoadBalancerTarget.builder().port(4).build())
-                .loadBalancerTargetGroup(Component.builder().id("lb-target-group-1").build())
-                .loadBalancerTargetGroups(ImmutableList.of(Component.builder().id("lb-target-group-1").build(),
-                        Component.builder().id("lb-target-group-2").build()))
+                .loadBalancerTarget(AnalysisLoadBalancerTarget.builder().port(4).build())
+                .loadBalancerTargetGroup(AnalysisComponent.builder().id("lb-target-group-1").build())
+                .loadBalancerTargetGroups(ImmutableList.of(AnalysisComponent.builder().id("lb-target-group-1").build(),
+                        AnalysisComponent.builder().id("lb-target-group-2").build()))
                 .loadBalancerTargetPort(5)
                 .missingComponent("missing-comp")
-                .natGateway(Component.builder().id("ngw-id").build())
-                .networkInterface(Component.builder().id("eni-id").build())
+                .natGateway(AnalysisComponent.builder().id("ngw-id").build())
+                .networkInterface(AnalysisComponent.builder().id("eni-id").build())
                 .packetField("packet-field")
                 .port(6)
                 .portRanges(ImmutableList.of(PortRange.builder().from(7).build(),
                         PortRange.builder().from(8).build()))
-                .prefixList(Component.builder().id("prefix-list-id").build())
+                .prefixList(AnalysisComponent.builder().id("prefix-list-id").build())
                 .protocols(ImmutableList.of(Protocol.UDP.toString(), Protocol.TCP.toString()))
-                .routeTable(Component.builder().id("rtb-id").build())
-                .routeTableRoute(RouteTableRoute.builder().origin("origin").build())
-                .securityGroup(Component.builder().id("sg-1").build())
-                .securityGroupRule(SecurityGroupRule.builder().cidr("cidr").build())
-                .securityGroups(ImmutableList.of(Component.builder().id("sg-1").build(),
-                        Component.builder().id("sg-2").build()))
-                .sourceVpc(Component.builder().id("src-vpc").build())
+                .routeTable(AnalysisComponent.builder().id("rtb-id").build())
+                .routeTableRoute(AnalysisRouteTableRoute.builder().origin("origin").build())
+                .securityGroup(AnalysisComponent.builder().id("sg-1").build())
+                .securityGroupRule(AnalysisSecurityGroupRule.builder().cidr("cidr").build())
+                .securityGroups(ImmutableList.of(AnalysisComponent.builder().id("sg-1").build(),
+                        AnalysisComponent.builder().id("sg-2").build()))
+                .sourceVpc(AnalysisComponent.builder().id("src-vpc").build())
                 .state("state")
-                .subnet(Component.builder().id("subnet-id").build())
-                .subnetRouteTable(Component.builder().id("subnet-rtb").build())
-                .vpc(Component.builder().id("vpc-id").build())
-                .vpcEndpoint(Component.builder().id("vpc-endpoint").build())
-                .vpcPeeringConnection(Component.builder().id("pcx-id").build())
-                .vpnConnection(Component.builder().id("vpnc-id").build())
-                .vpnGateway(Component.builder().id("vgw-id").build())
+                .subnet(AnalysisComponent.builder().id("subnet-id").build())
+                .subnetRouteTable(AnalysisComponent.builder().id("subnet-rtb").build())
+                .vpc(AnalysisComponent.builder().id("vpc-id").build())
+                .vpcEndpoint(AnalysisComponent.builder().id("vpc-endpoint").build())
+                .vpcPeeringConnection(AnalysisComponent.builder().id("pcx-id").build())
+                .vpnConnection(AnalysisComponent.builder().id("vpnc-id").build())
+                .vpnGateway(AnalysisComponent.builder().id("vgw-id").build())
                 .build();
 
         Explanation actual = TranslatorHelper.translateExplanation(input);
@@ -271,26 +271,26 @@ public class TranslatorHelperTest {
 
     @Test
     public void translateAclRuleExpectSuccess() {
-        software.amazon.awssdk.services.ec2.model.AclRule input =
-                software.amazon.awssdk.services.ec2.model.AclRule.builder()
+        software.amazon.awssdk.services.ec2.model.AnalysisAclRule input =
+                software.amazon.awssdk.services.ec2.model.AnalysisAclRule.builder()
                         .build();
 
-        AclRule expected = AclRule.builder()
+        AnalysisAclRule expected = AnalysisAclRule.builder()
                 .build();
 
-        AclRule actual = TranslatorHelper.translateAclRule(input);
+        AnalysisAclRule actual = TranslatorHelper.translateAclRule(input);
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void translateAclRuleGivenEmptyExpectSuccess() {
-        software.amazon.awssdk.services.ec2.model.AclRule input =
-                software.amazon.awssdk.services.ec2.model.AclRule.builder().build();
+        software.amazon.awssdk.services.ec2.model.AnalysisAclRule input =
+                software.amazon.awssdk.services.ec2.model.AnalysisAclRule.builder().build();
 
-        AclRule expected = AclRule.builder().build();
+        AnalysisAclRule expected = AnalysisAclRule.builder().build();
 
-        AclRule actual = TranslatorHelper.translateAclRule(input);
+        AnalysisAclRule actual = TranslatorHelper.translateAclRule(input);
 
         assertEquals(expected, actual);
     }
@@ -338,30 +338,30 @@ public class TranslatorHelperTest {
 
     @Test
     public void translateComponentExpectSuccess() {
-        software.amazon.awssdk.services.ec2.model.Component input =
-                software.amazon.awssdk.services.ec2.model.Component.builder()
+        software.amazon.awssdk.services.ec2.model.AnalysisComponent input =
+                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder()
                         .id("id")
                         .arn("arn")
                         .build();
 
-        Component expected = Component.builder()
+        AnalysisComponent expected = AnalysisComponent.builder()
                 .id("id")
                 .arn("arn")
                 .build();
 
-        Component actual = TranslatorHelper.translateComponent(input);
+        AnalysisComponent actual = TranslatorHelper.translateComponent(input);
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void translateComponentGivenEmptyExpectSuccess() {
-        software.amazon.awssdk.services.ec2.model.Component input =
-                software.amazon.awssdk.services.ec2.model.Component.builder().build();
+        software.amazon.awssdk.services.ec2.model.AnalysisComponent input =
+                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().build();
 
-        Component expected = Component.builder().build();
+        AnalysisComponent expected = AnalysisComponent.builder().build();
 
-        Component actual = TranslatorHelper.translateComponent(input);
+        AnalysisComponent actual = TranslatorHelper.translateComponent(input);
 
         assertEquals(expected, actual);
     }
@@ -373,8 +373,8 @@ public class TranslatorHelperTest {
 
     @Test
     public void translateHeaderExpectSuccess() {
-        software.amazon.awssdk.services.ec2.model.Header input =
-                software.amazon.awssdk.services.ec2.model.Header.builder()
+        software.amazon.awssdk.services.ec2.model.AnalysisPacketHeader input =
+                software.amazon.awssdk.services.ec2.model.AnalysisPacketHeader.builder()
                         .protocol(Protocol.UDP)
                         .destinationAddresses(ImmutableList.of("1.2.3.4"))
                         .destinationPortRanges(ImmutableList.of(
@@ -384,7 +384,7 @@ public class TranslatorHelperTest {
                                 software.amazon.awssdk.services.ec2.model.PortRange.builder().from(1).build()))
                         .build();
 
-        Header expected = Header.builder()
+        AnalysisPacketHeader expected = AnalysisPacketHeader.builder()
                 .protocol("udp")
                 .destinationAddresses(ImmutableList.of("1.2.3.4"))
                 .destinationPortRanges(ImmutableList.of(PortRange.builder().from(0).build()))
@@ -392,19 +392,19 @@ public class TranslatorHelperTest {
                 .sourcePortRanges(ImmutableList.of(PortRange.builder().from(1).build()))
                 .build();
 
-        Header actual = TranslatorHelper.translateHeader(input);
+        AnalysisPacketHeader actual = TranslatorHelper.translateHeader(input);
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void translateHeaderGivenEmptyExpectSuccess() {
-        software.amazon.awssdk.services.ec2.model.Header input =
-                software.amazon.awssdk.services.ec2.model.Header.builder().build();
+        software.amazon.awssdk.services.ec2.model.AnalysisPacketHeader input =
+                software.amazon.awssdk.services.ec2.model.AnalysisPacketHeader.builder().build();
 
-        Header expected = Header.builder().build();
+        AnalysisPacketHeader expected = AnalysisPacketHeader.builder().build();
 
-        Header actual = TranslatorHelper.translateHeader(input);
+        AnalysisPacketHeader actual = TranslatorHelper.translateHeader(input);
 
         assertEquals(expected, actual);
     }
@@ -416,8 +416,8 @@ public class TranslatorHelperTest {
 
     @Test
     public void translateRouteTableRouteExpectSuccess() {
-        software.amazon.awssdk.services.ec2.model.RouteTableRoute input =
-                software.amazon.awssdk.services.ec2.model.RouteTableRoute.builder()
+        software.amazon.awssdk.services.ec2.model.AnalysisRouteTableRoute input =
+                software.amazon.awssdk.services.ec2.model.AnalysisRouteTableRoute.builder()
                         .destinationCidr("cidr")
                         .destinationPrefixListId("prefix")
                         .egressOnlyInternetGatewayId("igw-1")
@@ -430,7 +430,7 @@ public class TranslatorHelperTest {
                         .origin("origin")
                         .build();
 
-        RouteTableRoute expected = RouteTableRoute.builder()
+        AnalysisRouteTableRoute expected = AnalysisRouteTableRoute.builder()
                 .destinationCidr("cidr")
                 .destinationPrefixListId("prefix")
                 .egressOnlyInternetGatewayId("igw-1")
@@ -443,19 +443,19 @@ public class TranslatorHelperTest {
                 .origin("origin")
                 .build();
 
-        RouteTableRoute actual = TranslatorHelper.translateRouteTableRoute(input);
+        AnalysisRouteTableRoute actual = TranslatorHelper.translateRouteTableRoute(input);
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void translateRouteTableRouteGivenEmptyExpectSuccess() {
-        software.amazon.awssdk.services.ec2.model.RouteTableRoute input =
-                software.amazon.awssdk.services.ec2.model.RouteTableRoute.builder().build();
+        software.amazon.awssdk.services.ec2.model.AnalysisRouteTableRoute input =
+                software.amazon.awssdk.services.ec2.model.AnalysisRouteTableRoute.builder().build();
 
-        RouteTableRoute expected = RouteTableRoute.builder().build();
+        AnalysisRouteTableRoute expected = AnalysisRouteTableRoute.builder().build();
 
-        RouteTableRoute actual = TranslatorHelper.translateRouteTableRoute(input);
+        AnalysisRouteTableRoute actual = TranslatorHelper.translateRouteTableRoute(input);
 
         assertEquals(expected, actual);
     }
@@ -467,8 +467,8 @@ public class TranslatorHelperTest {
 
     @Test
     public void translateSecurityGroupRuleExpectSuccess() {
-        software.amazon.awssdk.services.ec2.model.SecurityGroupRule input =
-                software.amazon.awssdk.services.ec2.model.SecurityGroupRule.builder()
+        software.amazon.awssdk.services.ec2.model.AnalysisSecurityGroupRule input =
+                software.amazon.awssdk.services.ec2.model.AnalysisSecurityGroupRule.builder()
                         .cidr("cidr")
                         .direction("direction")
                         .portRange(software.amazon.awssdk.services.ec2.model.PortRange.builder().from(0).build())
@@ -477,7 +477,7 @@ public class TranslatorHelperTest {
                         .securityGroupId("sg-1")
                         .build();
 
-        SecurityGroupRule expected = SecurityGroupRule.builder()
+        AnalysisSecurityGroupRule expected = AnalysisSecurityGroupRule.builder()
                 .cidr("cidr")
                 .direction("direction")
                 .portRange(PortRange.builder().from(0).build())
@@ -486,19 +486,19 @@ public class TranslatorHelperTest {
                 .securityGroupId("sg-1")
                 .build();
 
-        SecurityGroupRule actual = TranslatorHelper.translateSecurityGroupRule(input);
+        AnalysisSecurityGroupRule actual = TranslatorHelper.translateSecurityGroupRule(input);
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void translateSecurityGroupRuleGivenEmptyExpectSuccess() {
-        software.amazon.awssdk.services.ec2.model.SecurityGroupRule input =
-                software.amazon.awssdk.services.ec2.model.SecurityGroupRule.builder().build();
+        software.amazon.awssdk.services.ec2.model.AnalysisSecurityGroupRule input =
+                software.amazon.awssdk.services.ec2.model.AnalysisSecurityGroupRule.builder().build();
 
-        SecurityGroupRule expected = SecurityGroupRule.builder().build();
+        AnalysisSecurityGroupRule expected = AnalysisSecurityGroupRule.builder().build();
 
-        SecurityGroupRule actual = TranslatorHelper.translateSecurityGroupRule(input);
+        AnalysisSecurityGroupRule actual = TranslatorHelper.translateSecurityGroupRule(input);
 
         assertEquals(expected, actual);
     }
@@ -510,30 +510,30 @@ public class TranslatorHelperTest {
 
     @Test
     public void translateLoadBalancerListenerExpectSuccess() {
-        software.amazon.awssdk.services.ec2.model.LoadBalancerListener input =
-                software.amazon.awssdk.services.ec2.model.LoadBalancerListener.builder()
+        software.amazon.awssdk.services.ec2.model.AnalysisLoadBalancerListener input =
+                software.amazon.awssdk.services.ec2.model.AnalysisLoadBalancerListener.builder()
                         .loadBalancerPort(8443)
                         .instancePort(8000)
                         .build();
 
-        LoadBalancerListener expected = LoadBalancerListener.builder()
+        AnalysisLoadBalancerListener expected = AnalysisLoadBalancerListener.builder()
                 .loadBalancerPort(8443)
                 .instancePort(8000)
                 .build();
 
-        LoadBalancerListener actual = TranslatorHelper.translateLoadBalancerListener(input);
+        AnalysisLoadBalancerListener actual = TranslatorHelper.translateLoadBalancerListener(input);
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void translateLoadBalancerListenerGivenEmptyExpectSuccess() {
-        software.amazon.awssdk.services.ec2.model.LoadBalancerListener input =
-                software.amazon.awssdk.services.ec2.model.LoadBalancerListener.builder().build();
+        software.amazon.awssdk.services.ec2.model.AnalysisLoadBalancerListener input =
+                software.amazon.awssdk.services.ec2.model.AnalysisLoadBalancerListener.builder().build();
 
-        LoadBalancerListener expected = LoadBalancerListener.builder().build();
+        AnalysisLoadBalancerListener expected = AnalysisLoadBalancerListener.builder().build();
 
-        LoadBalancerListener actual = TranslatorHelper.translateLoadBalancerListener(input);
+        AnalysisLoadBalancerListener actual = TranslatorHelper.translateLoadBalancerListener(input);
 
         assertEquals(expected, actual);
     }
@@ -545,34 +545,34 @@ public class TranslatorHelperTest {
 
     @Test
     public void translateLoadBalancerTargetExpectSuccess() {
-        software.amazon.awssdk.services.ec2.model.LoadBalancerTarget input =
-                software.amazon.awssdk.services.ec2.model.LoadBalancerTarget.builder()
+        software.amazon.awssdk.services.ec2.model.AnalysisLoadBalancerTarget input =
+                software.amazon.awssdk.services.ec2.model.AnalysisLoadBalancerTarget.builder()
                         .address("address")
                         .availabilityZone("az1")
-                        .instance(software.amazon.awssdk.services.ec2.model.Component.builder().id("i-1").build())
+                        .instance(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("i-1").build())
                         .port(8443)
                         .build();
 
-        LoadBalancerTarget expected = LoadBalancerTarget.builder()
+        AnalysisLoadBalancerTarget expected = AnalysisLoadBalancerTarget.builder()
                 .address("address")
                 .availabilityZone("az1")
-                .instance(Component.builder().id("i-1").build())
+                .instance(AnalysisComponent.builder().id("i-1").build())
                 .port(8443)
                 .build();
 
-        LoadBalancerTarget actual = TranslatorHelper.translateLoadBalancerTarget(input);
+        AnalysisLoadBalancerTarget actual = TranslatorHelper.translateLoadBalancerTarget(input);
 
         assertEquals(expected, actual);
     }
 
     @Test
     public void translateLoadBalancerTargetGivenEmptyExpectSuccess() {
-        software.amazon.awssdk.services.ec2.model.LoadBalancerTarget input =
-                software.amazon.awssdk.services.ec2.model.LoadBalancerTarget.builder().build();
+        software.amazon.awssdk.services.ec2.model.AnalysisLoadBalancerTarget input =
+                software.amazon.awssdk.services.ec2.model.AnalysisLoadBalancerTarget.builder().build();
 
-        LoadBalancerTarget expected = LoadBalancerTarget.builder().build();
+        AnalysisLoadBalancerTarget expected = AnalysisLoadBalancerTarget.builder().build();
 
-        LoadBalancerTarget actual = TranslatorHelper.translateLoadBalancerTarget(input);
+        AnalysisLoadBalancerTarget actual = TranslatorHelper.translateLoadBalancerTarget(input);
 
         assertEquals(expected, actual);
     }
@@ -584,17 +584,17 @@ public class TranslatorHelperTest {
 
     @Test
     public void translateComponentsExpectSuccess() {
-        List<software.amazon.awssdk.services.ec2.model.Component> input = ImmutableList.of(
-                software.amazon.awssdk.services.ec2.model.Component.builder().id("1").build(),
-                software.amazon.awssdk.services.ec2.model.Component.builder().id("2").build()
+        List<software.amazon.awssdk.services.ec2.model.AnalysisComponent> input = ImmutableList.of(
+                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("1").build(),
+                software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("2").build()
         );
 
-        List<Component> expected = ImmutableList.of(
-                Component.builder().id("1").build(),
-                Component.builder().id("2").build()
+        List<AnalysisComponent> expected = ImmutableList.of(
+                AnalysisComponent.builder().id("1").build(),
+                AnalysisComponent.builder().id("2").build()
         );
 
-        List<Component> actual = TranslatorHelper.translateComponents(input);
+        List<AnalysisComponent> actual = TranslatorHelper.translateComponents(input);
 
         assertEquals(expected, actual);
     }

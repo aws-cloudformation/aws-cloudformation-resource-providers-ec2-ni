@@ -1,11 +1,10 @@
 package software.amazon.ec2.networkinsightsanalysis;
 
 import com.google.common.collect.ImmutableList;
-import software.amazon.awssdk.services.ec2.model.Component;
+import software.amazon.awssdk.services.ec2.model.AnalysisComponent;
 import software.amazon.awssdk.services.ec2.model.Explanation;
 import software.amazon.awssdk.services.ec2.model.StartNetworkInsightsAnalysisRequest;
 import software.amazon.awssdk.services.ec2.model.StartNetworkInsightsAnalysisResponse;
-import software.amazon.awssdk.services.ec2.model.DeleteNetworkInsightsAnalysisRequest;
 import software.amazon.awssdk.services.ec2.model.DescribeNetworkInsightsAnalysesRequest;
 import software.amazon.awssdk.services.ec2.model.NetworkInsightsAnalysis;
 import software.amazon.awssdk.services.ec2.model.Tag;
@@ -68,8 +67,8 @@ public class AnalysisFactory {
         return 0;
     }
 
-    public static String arrangeErrorMessage() {
-        return "error message";
+    public static String arrangeStatusMessage() {
+        return "status message";
     }
 
     public static boolean arrangeNetworkPathFound() {
@@ -84,8 +83,8 @@ public class AnalysisFactory {
         return arrangeId("value");
     }
 
-    public static Component arrangeComponent() {
-        return Component.builder().id(arrangeId("component")).build();
+    public static AnalysisComponent arrangeComponent() {
+        return AnalysisComponent.builder().id(arrangeId("component")).build();
     }
 
     public static List<Explanation> arrangeExplanations() {
@@ -127,8 +126,7 @@ public class AnalysisFactory {
                 .startDate(arrangeStartDate().toString())
                 .status(arrangeStatus())
                 .networkPathFound(arrangeNetworkPathFound())
-                .errorCode(arrangeErrorCode())
-                .errorMessage(arrangeErrorMessage())
+                .statusMessage(arrangeStatusMessage())
                 .build();
     }
 
@@ -179,8 +177,7 @@ public class AnalysisFactory {
                 .startDate(arrangeStartDate())
                 .status(arrangeStatus())
                 .networkPathFound(arrangeNetworkPathFound())
-                .errorCode(arrangeErrorCode())
-                .errorMessage(arrangeErrorMessage())
+                .statusMessage(arrangeStatusMessage())
                 .explanations(arrangeExplanations())
                 .forwardPathComponents(arrangePathComponents())
                 .returnPathComponents(arrangePathComponents())
@@ -228,8 +225,7 @@ public class AnalysisFactory {
                 .networkInsightsPathId(model.getNetworkInsightsPathId())
                 .filterInArns(model.getFilterInArns())
                 .networkPathFound(model.getNetworkPathFound())
-                .errorCode(model.getErrorCode())
-                .errorMessage(model.getErrorMessage());
+                .statusMessage(model.getStatusMessage());
         if (model.getTags() != null) {
             builder.tags(model.getTags().stream().map(tag -> Tag.builder()
                     .key(tag.getKey())

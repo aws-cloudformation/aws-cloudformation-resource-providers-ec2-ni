@@ -68,8 +68,7 @@ public class CreateHandler extends BaseHandlerStd {
                 || model.getNetworkInsightsAnalysisArn() != null
                 || model.getStartDate() != null
                 || model.getNetworkPathFound() != null
-                || model.getErrorCode() != null
-                || model.getErrorMessage() != null
+                || model.getStatusMessage() != null
                 || model.getStatus() != null
                 || model.getExplanations() != null
                 || model.getAlternatePathHints() != null

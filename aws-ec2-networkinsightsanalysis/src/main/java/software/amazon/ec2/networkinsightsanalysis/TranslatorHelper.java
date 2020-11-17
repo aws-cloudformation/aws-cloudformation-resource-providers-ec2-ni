@@ -97,11 +97,11 @@ public class TranslatorHelper {
     return list;
   }
 
-  static AclRule translateAclRule(software.amazon.awssdk.services.ec2.model.AclRule aclRule) {
+  static AnalysisAclRule translateAclRule(software.amazon.awssdk.services.ec2.model.AnalysisAclRule aclRule) {
     if (aclRule == null) {
       return null;
     }
-    return AclRule.builder()
+    return AnalysisAclRule.builder()
             .cidr(aclRule.cidr())
             .egress(aclRule.egress())
             .portRange(translatePortRange(aclRule.portRange()))
@@ -121,21 +121,21 @@ public class TranslatorHelper {
             .build();
   }
 
-  static Component translateComponent(software.amazon.awssdk.services.ec2.model.Component component) {
+  static AnalysisComponent translateComponent(software.amazon.awssdk.services.ec2.model.AnalysisComponent component) {
     if (component == null) {
       return null;
     }
-    return Component.builder()
+    return AnalysisComponent.builder()
             .arn(component.arn())
             .id(component.id())
             .build();
   }
 
-  static Header translateHeader(software.amazon.awssdk.services.ec2.model.Header header) {
+  static AnalysisPacketHeader translateHeader(software.amazon.awssdk.services.ec2.model.AnalysisPacketHeader header) {
     if (header == null) {
       return null;
     }
-    return Header.builder()
+    return AnalysisPacketHeader.builder()
             .destinationAddresses(translateStringList(header.destinationAddresses()))
             .destinationPortRanges(translatePortRanges(header.destinationPortRanges()))
             .protocol(header.protocolAsString())
@@ -144,12 +144,12 @@ public class TranslatorHelper {
             .build();
   }
 
-  static RouteTableRoute translateRouteTableRoute(
-          software.amazon.awssdk.services.ec2.model.RouteTableRoute routeTableRoute) {
+  static AnalysisRouteTableRoute translateRouteTableRoute(
+          software.amazon.awssdk.services.ec2.model.AnalysisRouteTableRoute routeTableRoute) {
     if (routeTableRoute == null) {
       return null;
     }
-    return RouteTableRoute.builder()
+    return AnalysisRouteTableRoute.builder()
             .destinationCidr(routeTableRoute.destinationCidr())
             .destinationPrefixListId(routeTableRoute.destinationPrefixListId())
             .egressOnlyInternetGatewayId(routeTableRoute.egressOnlyInternetGatewayId())
@@ -163,12 +163,12 @@ public class TranslatorHelper {
             .build();
   }
 
-  static SecurityGroupRule translateSecurityGroupRule(
-          software.amazon.awssdk.services.ec2.model.SecurityGroupRule securityGroupRule) {
+  static AnalysisSecurityGroupRule translateSecurityGroupRule(
+          software.amazon.awssdk.services.ec2.model.AnalysisSecurityGroupRule securityGroupRule) {
     if (securityGroupRule == null) {
       return null;
     }
-    return SecurityGroupRule.builder()
+    return AnalysisSecurityGroupRule.builder()
             .cidr(securityGroupRule.cidr())
             .direction(securityGroupRule.direction())
             .portRange(translatePortRange(securityGroupRule.portRange()))
@@ -178,23 +178,23 @@ public class TranslatorHelper {
             .build();
   }
 
-  static LoadBalancerListener translateLoadBalancerListener(
-          software.amazon.awssdk.services.ec2.model.LoadBalancerListener loadBalancerListener) {
+  static AnalysisLoadBalancerListener translateLoadBalancerListener(
+          software.amazon.awssdk.services.ec2.model.AnalysisLoadBalancerListener loadBalancerListener) {
     if (loadBalancerListener == null) {
       return null;
     }
-    return LoadBalancerListener.builder()
+    return AnalysisLoadBalancerListener.builder()
             .instancePort(loadBalancerListener.instancePort())
             .loadBalancerPort(loadBalancerListener.loadBalancerPort())
             .build();
   }
 
-  static LoadBalancerTarget translateLoadBalancerTarget(
-          software.amazon.awssdk.services.ec2.model.LoadBalancerTarget loadBalancerTarget) {
+  static AnalysisLoadBalancerTarget translateLoadBalancerTarget(
+          software.amazon.awssdk.services.ec2.model.AnalysisLoadBalancerTarget loadBalancerTarget) {
     if (loadBalancerTarget == null) {
       return null;
     }
-    return LoadBalancerTarget.builder()
+    return AnalysisLoadBalancerTarget.builder()
             .address(loadBalancerTarget.address())
             .availabilityZone(loadBalancerTarget.availabilityZone())
             .instance(translateComponent(loadBalancerTarget.instance()))
@@ -202,8 +202,8 @@ public class TranslatorHelper {
             .build();
   }
 
-  static List<Component> translateComponents(
-          List<software.amazon.awssdk.services.ec2.model.Component> components) {
+  static List<AnalysisComponent> translateComponents(
+          List<software.amazon.awssdk.services.ec2.model.AnalysisComponent> components) {
     if (components == null || components.isEmpty()) {
       return null;
     }
