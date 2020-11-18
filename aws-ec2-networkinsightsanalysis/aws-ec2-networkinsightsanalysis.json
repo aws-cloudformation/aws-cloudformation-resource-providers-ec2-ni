@@ -442,9 +442,9 @@
         "Status": {
             "type": "string",
             "enum": [
-                "RUNNING",
-                "FAILED",
-                "SUCCEEDED"
+                "running",
+                "failed",
+                "succeeded"
             ]
         },
         "StatusMessage": {

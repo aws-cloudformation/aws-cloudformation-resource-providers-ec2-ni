@@ -41,6 +41,8 @@ public class UpdateHandlerTest extends AbstractTestBase {
     LoggerProxy loggerProxy;
     @Mock
     Ec2Client client;
+    @Mock
+    CallbackContext callbackContext;
     @Captor
     ArgumentCaptor<CreateTagsRequest> createTagCaptor;
     @Captor
@@ -86,7 +88,7 @@ public class UpdateHandlerTest extends AbstractTestBase {
         doReturn(deleteTagsResponse)
                 .when(client).deleteTags(any(DeleteTagsRequest.class));
 
-        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
+        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, callbackContext, logger);
 
         verify(client).describeNetworkInsightsAnalyses(describeAnalysisCaptor.capture());
         verify(client).createTags(createTagCaptor.capture());
@@ -113,7 +115,7 @@ public class UpdateHandlerTest extends AbstractTestBase {
         doThrow(exception).when(client)
                 .describeNetworkInsightsAnalyses(any(DescribeNetworkInsightsAnalysesRequest.class));
 
-        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
+        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, callbackContext, logger);
 
         assertEquals(OperationStatus.FAILED, response.getStatus());
         assertEquals(HandlerErrorCode.NotFound, response.getErrorCode());

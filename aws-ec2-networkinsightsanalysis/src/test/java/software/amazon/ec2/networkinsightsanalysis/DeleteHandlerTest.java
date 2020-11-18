@@ -35,6 +35,8 @@ public class DeleteHandlerTest extends AbstractTestBase {
     @Mock
     Ec2Client client;
     @Mock
+    CallbackContext callbackContext;
+    @Mock
     LoggerProxy loggerProxy;
     @Captor
     ArgumentCaptor<DeleteNetworkInsightsAnalysisRequest> requestCaptor;
@@ -60,7 +62,7 @@ public class DeleteHandlerTest extends AbstractTestBase {
                 .build();
         when(client.deleteNetworkInsightsAnalysis(any(DeleteNetworkInsightsAnalysisRequest.class))).thenReturn(deleteAnalysisResponse);
 
-        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
+        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, callbackContext, logger);
 
         verify(client).deleteNetworkInsightsAnalysis(requestCaptor.capture());
         final DeleteNetworkInsightsAnalysisRequest actualRequest = requestCaptor.getValue();
@@ -83,7 +85,7 @@ public class DeleteHandlerTest extends AbstractTestBase {
         doThrow(exception).when(client)
                 .deleteNetworkInsightsAnalysis(any(DeleteNetworkInsightsAnalysisRequest.class));
 
-        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
+        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, callbackContext, logger);
 
         assertNull(response.getResourceModel());
         assertEquals(OperationStatus.FAILED, response.getStatus());

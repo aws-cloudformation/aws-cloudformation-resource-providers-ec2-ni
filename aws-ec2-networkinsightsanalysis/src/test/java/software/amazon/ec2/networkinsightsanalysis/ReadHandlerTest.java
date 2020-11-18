@@ -37,6 +37,8 @@ public class ReadHandlerTest extends AbstractTestBase {
     @Mock
     LoggerProxy loggerProxy;
     @Mock
+    CallbackContext callbackContext;
+    @Mock
     Ec2Client client;
     @Captor
     ArgumentCaptor<DescribeNetworkInsightsAnalysesRequest> describeAnalysisCaptor;
@@ -62,7 +64,7 @@ public class ReadHandlerTest extends AbstractTestBase {
         doReturn(describeResponse)
                 .when(client).describeNetworkInsightsAnalyses(any(DescribeNetworkInsightsAnalysesRequest.class));
 
-        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
+        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, callbackContext, logger);
 
         verify(client).describeNetworkInsightsAnalyses(describeAnalysisCaptor.capture());
         assertEquals(analysis.networkInsightsAnalysisId(),
@@ -84,7 +86,7 @@ public class ReadHandlerTest extends AbstractTestBase {
         doThrow(exception).when(client)
                 .describeNetworkInsightsAnalyses(any(DescribeNetworkInsightsAnalysesRequest.class));
 
-        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
+        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, callbackContext, logger);
 
         assertNull(response.getResourceModel());
         assertEquals(OperationStatus.FAILED, response.getStatus());

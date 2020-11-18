@@ -17,6 +17,7 @@ public class ReadHandler extends BaseHandlerStd {
                                                                           final ResourceHandlerRequest<ResourceModel>
                                                                                   resourceHandlerRequest,
                                                                           final Ec2Client client,
+                                                                          final CallbackContext callbackContext,
                                                                           final Logger logger) {
         final ResourceModel model = resourceHandlerRequest.getDesiredResourceState();
         final DescribeNetworkInsightsAnalysesRequest describeRequest = Translator.translateToReadRequest(model);

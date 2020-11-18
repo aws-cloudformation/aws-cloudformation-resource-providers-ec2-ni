@@ -2,6 +2,8 @@ package software.amazon.ec2.networkinsightsanalysis;
 
 import com.google.common.collect.ImmutableList;
 import software.amazon.awssdk.services.ec2.model.AnalysisComponent;
+import software.amazon.awssdk.services.ec2.model.AnalysisStatus;
+import software.amazon.awssdk.services.ec2.model.DescribeNetworkInsightsAnalysesResponse;
 import software.amazon.awssdk.services.ec2.model.Explanation;
 import software.amazon.awssdk.services.ec2.model.StartNetworkInsightsAnalysisRequest;
 import software.amazon.awssdk.services.ec2.model.StartNetworkInsightsAnalysisResponse;
@@ -60,7 +62,7 @@ public class AnalysisFactory {
     }
 
     public static String arrangeStatus() {
-        return "RUNNING";
+        return "running";
     }
 
     public static int arrangeErrorCode() {
@@ -216,6 +218,28 @@ public class AnalysisFactory {
                 .networkInsightsAnalysis(analysis)
                 .build();
     }
+
+    public static DescribeNetworkInsightsAnalysesResponse arrangeDescribeAnalysisResponse(NetworkInsightsAnalysis analysis) {
+        return DescribeNetworkInsightsAnalysesResponse.builder()
+            .networkInsightsAnalyses(analysis)
+            .build();
+    }
+
+    public static DescribeNetworkInsightsAnalysesResponse arrangeSucceededDescribeAnalysisResponse(NetworkInsightsAnalysis analysis) {
+        final NetworkInsightsAnalysis succeededAnalysis = analysis.toBuilder().status(AnalysisStatus.SUCCEEDED).build();
+        return arrangeDescribeResponseBuilder(succeededAnalysis).build();
+    }
+
+    public static DescribeNetworkInsightsAnalysesResponse arrangeFailedDescribeAnalysisResponse(NetworkInsightsAnalysis analysis) {
+        final NetworkInsightsAnalysis failedAnalysis = analysis.toBuilder().status(AnalysisStatus.FAILED).build();
+        return arrangeDescribeResponseBuilder(failedAnalysis).build();
+    }
+
+    public static DescribeNetworkInsightsAnalysesResponse.Builder arrangeDescribeResponseBuilder(NetworkInsightsAnalysis analysis) {
+        return DescribeNetworkInsightsAnalysesResponse.builder()
+            .networkInsightsAnalyses(analysis);
+    }
+
 
     public static NetworkInsightsAnalysis arrangeNetworkInsightsAnalysis(software.amazon.ec2.networkinsightsanalysis.ResourceModel model) {
         final NetworkInsightsAnalysis.Builder builder = NetworkInsightsAnalysis.builder()

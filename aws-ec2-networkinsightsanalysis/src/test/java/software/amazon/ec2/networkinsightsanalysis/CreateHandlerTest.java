@@ -10,6 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.services.ec2.Ec2Client;
+import software.amazon.awssdk.services.ec2.model.AnalysisStatus;
+import software.amazon.awssdk.services.ec2.model.DescribeNetworkInsightsAnalysesRequest;
+import software.amazon.awssdk.services.ec2.model.DescribeNetworkInsightsAnalysesResponse;
 import software.amazon.awssdk.services.ec2.model.NetworkInsightsAnalysis;
 import software.amazon.awssdk.services.ec2.model.StartNetworkInsightsAnalysisRequest;
 import software.amazon.awssdk.services.ec2.model.StartNetworkInsightsAnalysisResponse;
@@ -39,6 +42,8 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeAnalysis;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeAnalysisArn;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeAnalysisId;
+import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeDescribeAnalysisResponse;
+import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeFailedDescribeAnalysisResponse;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeFilterInArns;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeFullAnalysis;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeNetworkPathFound;
@@ -46,6 +51,7 @@ import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrang
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeStartDate;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeStatus;
 import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeStatusMessage;
+import static software.amazon.ec2.networkinsightsanalysis.AnalysisFactory.arrangeSucceededDescribeAnalysisResponse;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -54,9 +60,13 @@ public class CreateHandlerTest extends AbstractTestBase {
     @Mock
     LoggerProxy loggerProxy;
     @Mock
+    CallbackContext callbackContext;
+    @Mock
     Ec2Client client;
     @Captor
-    private ArgumentCaptor<StartNetworkInsightsAnalysisRequest> requestCaptor;
+    private ArgumentCaptor<StartNetworkInsightsAnalysisRequest> startRequestCaptor;
+    @Captor
+    private ArgumentCaptor<DescribeNetworkInsightsAnalysesRequest> describeRequestCaptor;
 
     private AmazonWebServicesClientProxy proxy;
 
@@ -74,7 +84,7 @@ public class CreateHandlerTest extends AbstractTestBase {
         model.setNetworkInsightsAnalysisId(arrangeAnalysisId());
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
 
-        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
+        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, callbackContext, logger));
     }
 
     @Test
@@ -83,7 +93,7 @@ public class CreateHandlerTest extends AbstractTestBase {
         model.setNetworkInsightsAnalysisArn(arrangeAnalysisArn());
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
 
-        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
+        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, callbackContext, logger));
     }
 
     @Test
@@ -92,7 +102,7 @@ public class CreateHandlerTest extends AbstractTestBase {
         model.setStartDate(arrangeStartDate().toString());
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
 
-        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
+        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, callbackContext, logger));
     }
 
     @Test
@@ -101,7 +111,7 @@ public class CreateHandlerTest extends AbstractTestBase {
         model.setNetworkPathFound(arrangeNetworkPathFound());
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
 
-        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
+        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, callbackContext, logger));
     }
 
     @Test
@@ -110,7 +120,7 @@ public class CreateHandlerTest extends AbstractTestBase {
         model.setStatusMessage(arrangeStatusMessage());
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
 
-        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
+        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, callbackContext, logger));
     }
 
     @Test
@@ -119,7 +129,7 @@ public class CreateHandlerTest extends AbstractTestBase {
         model.setStatus(arrangeStatus());
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
 
-        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
+        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, callbackContext, logger));
     }
 
     @Test
@@ -128,7 +138,7 @@ public class CreateHandlerTest extends AbstractTestBase {
         model.setExplanations(ImmutableList.of());
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
 
-        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
+        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, callbackContext, logger));
     }
 
     @Test
@@ -137,7 +147,7 @@ public class CreateHandlerTest extends AbstractTestBase {
         model.setAlternatePathHints(ImmutableList.of());
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
 
-        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
+        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, callbackContext, logger));
     }
 
     @Test
@@ -146,7 +156,7 @@ public class CreateHandlerTest extends AbstractTestBase {
         model.setForwardPathComponents(ImmutableList.of());
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
 
-        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
+        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, callbackContext, logger));
     }
 
     @Test
@@ -155,7 +165,7 @@ public class CreateHandlerTest extends AbstractTestBase {
         model.setReturnPathComponents(ImmutableList.of());
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
 
-        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, logger));
+        assertThrows(CfnInvalidRequestException.class, () -> sut.handleRequest(proxy, request, client, callbackContext, logger));
     }
 
     @Test
@@ -167,7 +177,7 @@ public class CreateHandlerTest extends AbstractTestBase {
                 .startNetworkInsightsAnalysis(any(StartNetworkInsightsAnalysisRequest.class));
 
         final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request,
-                client, logger);
+                client, callbackContext, logger);
 
         assertNull(response.getResourceModel());
         assertEquals(OperationStatus.FAILED, response.getStatus());
@@ -176,19 +186,23 @@ public class CreateHandlerTest extends AbstractTestBase {
     }
 
     @Test
-    public void handleRequestExpectModelUpdated() {
+    public void handleRequestGivenAnalysisSucceededExpectModelUpdated() {
         final ResourceModel model = AnalysisFactory.arrangeResourceModel();
         final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
         final NetworkInsightsAnalysis analysis = arrangeAnalysis(model.getNetworkInsightsPathId(),
                 model.getFilterInArns());
         final StartNetworkInsightsAnalysisResponse startAnalysisResponse = arrangeStartAnalysisResponse(analysis);
+        final DescribeNetworkInsightsAnalysesResponse describeAnalysisResponse = arrangeSucceededDescribeAnalysisResponse(analysis);
         doReturn(startAnalysisResponse).when(client)
                 .startNetworkInsightsAnalysis(any(StartNetworkInsightsAnalysisRequest.class));
+        doReturn(describeAnalysisResponse).when(client)
+            .describeNetworkInsightsAnalyses(any(DescribeNetworkInsightsAnalysesRequest.class));
 
-        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
+        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, callbackContext, logger);
 
         // validate response fields
-        validateResponse(response, request);
+        request.getDesiredResourceState().setStatus(AnalysisStatus.SUCCEEDED.toString());
+        validateResponse(response, request, OperationStatus.SUCCESS);
         final ResourceModel responseResourceModel = response.getResourceModel();
         // input fields
         assertNotNull(responseResourceModel.getNetworkInsightsPathId());
@@ -199,10 +213,68 @@ public class CreateHandlerTest extends AbstractTestBase {
         assertNotNull(responseResourceModel.getStatus());
 
         // request fields
-        verify(client).startNetworkInsightsAnalysis(requestCaptor.capture());
-        final StartNetworkInsightsAnalysisRequest actualRequest = requestCaptor.getValue();
-        validateRequest(actualRequest, request);
-        verifyNoMoreInteractions(client);
+        validateRequests(request, analysis);
+    }
+
+    @Test
+    public void handleRequestGivenAnalysisFailedExpectModelUpdated() {
+        final ResourceModel model = AnalysisFactory.arrangeResourceModel();
+        final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
+        final NetworkInsightsAnalysis analysis = arrangeAnalysis(model.getNetworkInsightsPathId(),
+            model.getFilterInArns());
+        final StartNetworkInsightsAnalysisResponse startAnalysisResponse = arrangeStartAnalysisResponse(analysis);
+        final DescribeNetworkInsightsAnalysesResponse describeAnalysisResponse = arrangeFailedDescribeAnalysisResponse(analysis);
+        doReturn(startAnalysisResponse).when(client)
+            .startNetworkInsightsAnalysis(any(StartNetworkInsightsAnalysisRequest.class));
+        doReturn(describeAnalysisResponse).when(client)
+            .describeNetworkInsightsAnalyses(any(DescribeNetworkInsightsAnalysesRequest.class));
+
+        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, callbackContext, logger);
+
+        // validate response fields
+        request.getDesiredResourceState().setStatus(AnalysisStatus.FAILED.toString());
+        validateResponse(response, request, OperationStatus.SUCCESS);
+        final ResourceModel responseResourceModel = response.getResourceModel();
+        // input fields
+        assertNotNull(responseResourceModel.getNetworkInsightsPathId());
+        // required read-only fields
+        assertNotNull(responseResourceModel.getNetworkInsightsAnalysisId());
+        assertNotNull(responseResourceModel.getNetworkInsightsAnalysisArn());
+        assertNotNull(responseResourceModel.getStartDate());
+        assertNotNull(responseResourceModel.getStatus());
+
+        // request fields
+        validateRequests(request, analysis);
+    }
+
+    @Test
+    public void handleRequestGivenAnalysisRunningExpectInProgressStatus() {
+        final ResourceModel model = AnalysisFactory.arrangeResourceModel();
+        final ResourceHandlerRequest<ResourceModel> request = arrangeResourceHandlerRequest(model);
+        final NetworkInsightsAnalysis analysis = arrangeAnalysis(model.getNetworkInsightsPathId(),
+            model.getFilterInArns());
+        final StartNetworkInsightsAnalysisResponse startAnalysisResponse = arrangeStartAnalysisResponse(analysis);
+        final DescribeNetworkInsightsAnalysesResponse describeAnalysisResponse = arrangeDescribeAnalysisResponse(analysis);
+        doReturn(startAnalysisResponse).when(client)
+            .startNetworkInsightsAnalysis(any(StartNetworkInsightsAnalysisRequest.class));
+        doReturn(describeAnalysisResponse).when(client)
+            .describeNetworkInsightsAnalyses(any(DescribeNetworkInsightsAnalysesRequest.class));
+
+        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, callbackContext, logger);
+
+        // validate response fields
+        validateResponse(response, request, OperationStatus.IN_PROGRESS);
+        final ResourceModel responseResourceModel = response.getResourceModel();
+        // input fields
+        assertNotNull(responseResourceModel.getNetworkInsightsPathId());
+        // required read-only fields
+        assertNotNull(responseResourceModel.getNetworkInsightsAnalysisId());
+        assertNotNull(responseResourceModel.getNetworkInsightsAnalysisArn());
+        assertNotNull(responseResourceModel.getStartDate());
+        assertNotNull(responseResourceModel.getStatus());
+
+        // request fields
+        validateRequests(request, analysis);
     }
 
     @Test
@@ -215,13 +287,17 @@ public class CreateHandlerTest extends AbstractTestBase {
         final NetworkInsightsAnalysis analysis = arrangeFullAnalysis(model.getNetworkInsightsPathId(),
                 model.getFilterInArns());
         final StartNetworkInsightsAnalysisResponse startAnalysisResponse = arrangeStartAnalysisResponse(analysis);
+        final DescribeNetworkInsightsAnalysesResponse describeAnalysisResponse = arrangeSucceededDescribeAnalysisResponse(analysis);
         doReturn(startAnalysisResponse).when(client)
                 .startNetworkInsightsAnalysis(any(StartNetworkInsightsAnalysisRequest.class));
+        doReturn(describeAnalysisResponse).when(client)
+            .describeNetworkInsightsAnalyses(any(DescribeNetworkInsightsAnalysesRequest.class));
 
-        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
+        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, callbackContext, logger);
 
         // validate response fields
-        validateResponse(response, request);
+        request.getDesiredResourceState().setStatus(AnalysisStatus.SUCCEEDED.toString());
+        validateResponse(response, request, OperationStatus.SUCCESS);
         final ResourceModel responseResourceModel = response.getResourceModel();
         // input fields
         assertNotNull(responseResourceModel.getNetworkInsightsPathId());
@@ -240,18 +316,29 @@ public class CreateHandlerTest extends AbstractTestBase {
         assertNotNull(responseResourceModel.getAlternatePathHints());
 
         // validate request fields
-        verify(client).startNetworkInsightsAnalysis(requestCaptor.capture());
-        final StartNetworkInsightsAnalysisRequest actualRequest = requestCaptor.getValue();
+        validateRequests(request, analysis);
+    }
+
+    private void validateRequests(ResourceHandlerRequest<ResourceModel> request, NetworkInsightsAnalysis analysis) {
+        verify(client).startNetworkInsightsAnalysis(startRequestCaptor.capture());
+        final StartNetworkInsightsAnalysisRequest actualRequest = startRequestCaptor.getValue();
         validateRequest(actualRequest, request);
+        verify(client).describeNetworkInsightsAnalyses(describeRequestCaptor.capture());
+        assertThat(describeRequestCaptor.getValue().networkInsightsAnalysisIds().get(0)).isEqualTo(analysis.networkInsightsAnalysisId());
         verifyNoMoreInteractions(client);
     }
 
     private void validateResponse(ProgressEvent<ResourceModel, CallbackContext> response,
-                                  ResourceHandlerRequest<ResourceModel> request) {
+                                  ResourceHandlerRequest<ResourceModel> request,
+                                  OperationStatus operationStatus) {
         assertThat(response).isNotNull();
-        assertThat(response.getStatus()).isEqualTo(OperationStatus.SUCCESS);
+        assertThat(response.getStatus()).isEqualTo(operationStatus);
         assertThat(response.getResourceModel()).isEqualTo(request.getDesiredResourceState());
-        assertThat(response.getCallbackDelaySeconds()).isEqualTo(0);
+        if (operationStatus == OperationStatus.IN_PROGRESS) {
+            assertThat(response.getCallbackDelaySeconds()).isEqualTo(20);
+        } else {
+            assertThat(response.getCallbackDelaySeconds()).isEqualTo(0);
+        }
         assertThat(response.getResourceModels()).isNull();
         assertThat(response.getMessage()).isNull();
         assertThat(response.getErrorCode()).isNull();

@@ -17,6 +17,7 @@ public class ListHandler extends BaseHandlerStd {
                                                                        final ResourceHandlerRequest<ResourceModel>
                                                                                resourceHandlerRequest,
                                                                        final Ec2Client client,
+                                                                       final CallbackContext callbackContext,
                                                                        final Logger logger) {
         final String nextToken = resourceHandlerRequest.getNextToken();
         logger.log("Trying to describe analyses with next token: " + nextToken);
