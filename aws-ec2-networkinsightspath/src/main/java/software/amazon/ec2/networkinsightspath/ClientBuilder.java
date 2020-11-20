@@ -9,7 +9,6 @@ public class ClientBuilder {
 
     public static Ec2Client getClient() {
         return Ec2Client.builder()
-            .endpointOverride(URI.create("https://ec2-shiraz.amazonaws.com"))
             .httpClient(LambdaWrapper.HTTP_CLIENT)
             .build();
     }
