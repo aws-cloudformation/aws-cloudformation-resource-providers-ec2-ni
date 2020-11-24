@@ -15,7 +15,7 @@ public abstract class BaseHandlerStd extends BaseHandler<CallbackContext> {
         final CallbackContext callbackContext,
         final Logger logger) {
         logger.log("request model for: " + this.getClass().getSimpleName() + ": " + request.getDesiredResourceState());
-        Ec2Client client = ClientBuilder.getClient();
+        Ec2Client client = ClientBuilder.getClient(logger);
         final ProgressEvent<ResourceModel, CallbackContext> response = handleRequest(
             proxy,
             request,
