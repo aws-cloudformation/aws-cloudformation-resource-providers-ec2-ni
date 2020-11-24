@@ -3,7 +3,7 @@
     "language": "java",
     "runtime": "java8",
     "entrypoint": "software.amazon.ec2.networkinsightspath.HandlerWrapper::handleRequest",
-    "testEntrypoint": "software.amazon.ec2.networkinsightspath.HandlerWrapper::testEntrypoint",
+    "testEntrypoint": "software.amazon.ec2.networkinsightspath.HandlerWrapper::handleRequest",
     "settings": {
         "namespace": [
             "software",
