@@ -6,4 +6,4 @@ Resources:
     Properties:
       Source: !ImportValue CanarySource
       Destination: !ImportValue CanaryDestination
-      Protocol: "TCP"
+      Protocol: "tcp"

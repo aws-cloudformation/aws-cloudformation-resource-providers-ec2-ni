@@ -78,7 +78,7 @@ public class PathFactory {
     }
 
     public static String arrangeProtocol() {
-        return "TCP";
+        return "tcp";
     }
 
     public static software.amazon.ec2.networkinsightspath.Tag arrangeTag() {

@@ -6,7 +6,7 @@ Resources:
     Properties:
       Source: !ImportValue CanarySource
       Destination: !ImportValue CanaryDestination
-      Protocol: "TCP"
+      Protocol: "tcp"
   CanaryAnalysis:
     Type: AWS::EC2::NetworkInsightsAnalysis
     Properties:

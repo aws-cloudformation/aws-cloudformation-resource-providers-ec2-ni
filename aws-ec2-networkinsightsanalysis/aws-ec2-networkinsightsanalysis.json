@@ -51,9 +51,9 @@
         "Protocol": {
             "type": "string",
             "enum": [
-                "TCP",
-                "UDP",
-                "ALL"
+                "tcp",
+                "udp",
+                "all"
             ]
         },
         "AnalysisAclRule" : {
