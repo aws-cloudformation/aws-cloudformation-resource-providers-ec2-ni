@@ -24,7 +24,7 @@ public class DeleteHandler extends BaseHandlerStd {
         try {
             proxy.injectCredentialsAndInvokeV2(deleteAnalysisRequest,
                     request -> {
-                        logger.log("DeleteAnalysisRequest: " + deleteAnalysisRequest);
+                        logger.log("DeleteAnalysisRequest: " + request);
                         final DeleteNetworkInsightsAnalysisResponse deleteAnalysisResponse =
                                 ec2Client.deleteNetworkInsightsAnalysis(request);
                         logger.log("DeleteAnalysisResponse: " + deleteAnalysisResponse);

@@ -24,8 +24,8 @@ public class ListHandler extends BaseHandlerStd {
         try {
             final DescribeNetworkInsightsPathsResponse response = proxy.injectCredentialsAndInvokeV2(describePathsRequest,
                 request -> {
-                    logger.log("DescribePathsRequest: " + describePathsRequest);
-                    final DescribeNetworkInsightsPathsResponse describeResponse = client.describeNetworkInsightsPaths(describePathsRequest);
+                    logger.log("DescribePathsRequest: " + request);
+                    final DescribeNetworkInsightsPathsResponse describeResponse = client.describeNetworkInsightsPaths(request);
                     logger.log("DescribePathsResponse: " + describeResponse);
 
                     return describeResponse;
