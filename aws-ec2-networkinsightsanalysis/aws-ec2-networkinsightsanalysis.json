@@ -14,6 +14,7 @@
         },
         "Tag": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "Key": {
                     "type": "string",
@@ -39,6 +40,7 @@
         },
         "PortRange": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "From": {
                     "type": "integer"
@@ -58,6 +60,7 @@
         },
         "AnalysisAclRule" : {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "Cidr": {
                     "type": "string"
@@ -81,6 +84,7 @@
         },
         "AnalysisPacketHeader" : {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "DestinationAddresses": {
                     "type": "array",
@@ -113,6 +117,7 @@
         },
         "PathComponent": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "SequenceNumber": {
                     "type": "integer"
@@ -151,6 +156,7 @@
         },
         "AnalysisComponent" : {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "Id": {
                     "type": "string"
@@ -167,6 +173,7 @@
         },
         "AnalysisLoadBalancerListener": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "InstancePort": {
                     "$ref": "#/definitions/Port"
@@ -178,6 +185,7 @@
         },
         "AnalysisLoadBalancerTarget": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "Address": {
                     "$ref": "#/definitions/IpAddress"
@@ -200,6 +208,7 @@
         },
         "AnalysisRouteTableRoute": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "destinationCidr": {
                     "type": "string"
@@ -235,6 +244,7 @@
         },
         "AnalysisSecurityGroupRule": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "Cidr": {
                     "type": "string"
@@ -258,6 +268,7 @@
         },
         "Explanation": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "Acl": {
                     "$ref": "#/definitions/AnalysisComponent"
@@ -419,6 +430,7 @@
         },
         "AlternatePathHint": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "ComponentId": {
                     "type": "string"
