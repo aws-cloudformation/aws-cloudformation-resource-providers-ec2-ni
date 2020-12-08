@@ -42,8 +42,7 @@
             "type": "string",
             "enum": [
                 "tcp",
-                "udp",
-                "all"
+                "udp"
             ]
         },
         "Port": {
