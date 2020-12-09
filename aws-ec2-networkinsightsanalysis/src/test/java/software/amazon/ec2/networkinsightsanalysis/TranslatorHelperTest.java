@@ -119,7 +119,7 @@ public class TranslatorHelperTest {
                                 software.amazon.awssdk.services.ec2.model.PortRange.builder().from(8).build()))
                         .prefixList(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("prefix-list-id")
                                 .build())
-                        .protocols(ImmutableList.of(Protocol.UDP, Protocol.TCP))
+                        .protocols(ImmutableList.of(Protocol.UDP.toString(), Protocol.TCP.toString()))
                         .routeTable(software.amazon.awssdk.services.ec2.model.AnalysisComponent.builder().id("rtb-id").build())
                         .routeTableRoute(software.amazon.awssdk.services.ec2.model.AnalysisRouteTableRoute.builder()
                                 .origin("origin").build())
@@ -377,7 +377,7 @@ public class TranslatorHelperTest {
     public void translateHeaderExpectSuccess() {
         software.amazon.awssdk.services.ec2.model.AnalysisPacketHeader input =
                 software.amazon.awssdk.services.ec2.model.AnalysisPacketHeader.builder()
-                        .protocol(Protocol.UDP)
+                        .protocol(Protocol.UDP.toString())
                         .destinationAddresses(ImmutableList.of("1.2.3.4"))
                         .destinationPortRanges(ImmutableList.of(
                                 software.amazon.awssdk.services.ec2.model.PortRange.builder().from(0).build()))
@@ -475,7 +475,7 @@ public class TranslatorHelperTest {
                         .direction("direction")
                         .portRange(software.amazon.awssdk.services.ec2.model.PortRange.builder().from(0).build())
                         .prefixListId("prefix")
-                        .protocol(Protocol.UDP)
+                        .protocol(Protocol.UDP.toString())
                         .securityGroupId("sg-1")
                         .build();
 

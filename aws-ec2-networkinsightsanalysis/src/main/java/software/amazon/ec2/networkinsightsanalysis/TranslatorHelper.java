@@ -62,7 +62,7 @@ public class TranslatorHelper {
             .port(explanation.port())
             .portRanges(translatePortRanges(explanation.portRanges()))
             .prefixList(translateComponent(explanation.prefixList()))
-            .protocols(translateStringList(explanation.protocolsAsStrings()))
+            .protocols(translateStringList(explanation.protocols()))
             .securityGroup(translateComponent(explanation.securityGroup()))
             .securityGroupRule(translateSecurityGroupRule(explanation.securityGroupRule()))
             .securityGroups(translateComponents(explanation.securityGroups()))
@@ -106,7 +106,7 @@ public class TranslatorHelper {
             .cidr(aclRule.cidr())
             .egress(aclRule.egress())
             .portRange(translatePortRange(aclRule.portRange()))
-            .protocol(aclRule.protocolAsString())
+            .protocol(aclRule.protocol())
             .ruleAction(aclRule.ruleAction())
             .ruleNumber(aclRule.ruleNumber())
             .build();
@@ -139,7 +139,7 @@ public class TranslatorHelper {
     return AnalysisPacketHeader.builder()
             .destinationAddresses(translateStringList(header.destinationAddresses()))
             .destinationPortRanges(translatePortRanges(header.destinationPortRanges()))
-            .protocol(header.protocolAsString())
+            .protocol(header.protocol())
             .sourceAddresses(translateStringList(header.sourceAddresses()))
             .sourcePortRanges(translatePortRanges(header.sourcePortRanges()))
             .build();
@@ -174,7 +174,7 @@ public class TranslatorHelper {
             .direction(securityGroupRule.direction())
             .portRange(translatePortRange(securityGroupRule.portRange()))
             .prefixListId(securityGroupRule.prefixListId())
-            .protocol(securityGroupRule.protocolAsString())
+            .protocol(securityGroupRule.protocol())
             .securityGroupId(securityGroupRule.securityGroupId())
             .build();
   }
