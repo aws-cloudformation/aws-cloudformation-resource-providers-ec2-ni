@@ -1,0 +1,5 @@
+{
+  "Source": "{{NetworkInsightsPathSource}}",
+  "Destination": "{{NetworkInsightsPathDestination}}",
+  "Protocol": "tcp"
+}
