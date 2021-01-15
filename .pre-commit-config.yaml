@@ -17,4 +17,3 @@ repos:
   - id: check-merge-conflict
   - id: check-yaml
     exclude: codebuild-ci.yaml
-    args: ['--unsafe']
