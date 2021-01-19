@@ -24,8 +24,6 @@ import software.amazon.cloudformation.proxy.OperationStatus;
 import software.amazon.cloudformation.proxy.ProgressEvent;
 import software.amazon.cloudformation.proxy.ResourceHandlerRequest;
 
-import java.util.Collections;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -105,6 +103,33 @@ public class UpdateHandlerTest extends AbstractTestBase {
     }
 
     @Test
+    public void handleRequestGivenNoTagsInResourceModelExpectSuccess() {
+        final String pathId = arrangePathId();
+        final ResourceModel model = arrangeResourceModel(pathId);
+        final ResourceHandlerRequest<ResourceModel> request = ResourceHandlerRequest.<ResourceModel>builder()
+                .previousResourceState(model)
+                .desiredResourceState(model)
+                .previousResourceTags(ImmutableMap.of())
+                .desiredResourceTags(ImmutableMap.of())
+                .build();
+        final DescribeNetworkInsightsPathsResponse describeResponse = DescribeNetworkInsightsPathsResponse.builder()
+                .build();
+        doReturn(describeResponse)
+                .when(client).describeNetworkInsightsPaths(any(DescribeNetworkInsightsPathsRequest.class));
+
+        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
+
+        verify(client).describeNetworkInsightsPaths(describePathCaptor.capture());
+        assertEquals(pathId, describePathCaptor.getValue().networkInsightsPathIds().get(0));
+        assertThat(response).isNotNull();
+        assertThat(response.getStatus()).isEqualTo(OperationStatus.SUCCESS);
+        assertThat(response.getCallbackDelaySeconds()).isEqualTo(0);
+        assertThat(response.getMessage()).isNull();
+        assertThat(response.getErrorCode()).isNull();
+        verifyNoMoreInteractions(client);
+    }
+
+    @Test
     public void handleRequestGivenEc2ThrowsExpectSuccess() {
         final ResourceModel model = PathFactory.arrangeResourceModel();
         final ResourceHandlerRequest<ResourceModel> request = ResourceHandlerRequest.<ResourceModel>builder()
@@ -120,15 +145,5 @@ public class UpdateHandlerTest extends AbstractTestBase {
         assertEquals(OperationStatus.FAILED, response.getStatus());
         assertEquals(HandlerErrorCode.NotFound, response.getErrorCode());
         assertEquals(exception.getMessage(), response.getMessage());
-    }
-
-    @Test
-    public void addTagsGivenNoTagsExpectSuccess() {
-        sut.addTags(arrangePathId(), Collections.emptyList(), client, proxy, logger);
-    }
-
-    @Test
-    public void deleteTagsGivenNoTagsExpectSuccess() {
-        sut.deleteTags(arrangePathId(), Collections.emptyList(), client, proxy, logger);
     }
 }
