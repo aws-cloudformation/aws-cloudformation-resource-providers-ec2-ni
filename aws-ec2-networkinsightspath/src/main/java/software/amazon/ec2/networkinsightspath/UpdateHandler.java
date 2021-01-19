@@ -88,7 +88,7 @@ public class UpdateHandler extends BaseHandlerStd {
         deleteTags(pathId, tagsToBeDeleted, client, proxy, logger);
     }
 
-    private void addTags(String pathId,
+    void addTags(String pathId,
                          List<Tag> tagsToBeAdded,
                          Ec2Client client,
                          AmazonWebServicesClientProxy proxy,
@@ -103,7 +103,7 @@ public class UpdateHandler extends BaseHandlerStd {
         }
     }
 
-    private void deleteTags(String pathId,
+    void deleteTags(String pathId,
                             List<Tag> tagsToBeDeleted,
                             Ec2Client client,
                             AmazonWebServicesClientProxy proxy,

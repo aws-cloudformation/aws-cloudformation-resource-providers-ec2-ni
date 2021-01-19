@@ -24,6 +24,8 @@ import software.amazon.cloudformation.proxy.OperationStatus;
 import software.amazon.cloudformation.proxy.ProgressEvent;
 import software.amazon.cloudformation.proxy.ResourceHandlerRequest;
 
+import java.util.Collections;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -118,5 +120,15 @@ public class UpdateHandlerTest extends AbstractTestBase {
         assertEquals(OperationStatus.FAILED, response.getStatus());
         assertEquals(HandlerErrorCode.NotFound, response.getErrorCode());
         assertEquals(exception.getMessage(), response.getMessage());
+    }
+
+    @Test
+    public void addTagsGivenNoTagsExpectFunctionSuccess() {
+        sut.addTags(arrangePathId(), Collections.emptyList(), client, proxy, logger);
+    }
+
+    @Test
+    public void deleteTagsGivenNoTagsExpectFunctionSuccess() {
+        sut.deleteTags(arrangePathId(), Collections.emptyList(), client, proxy, logger);
     }
 }
