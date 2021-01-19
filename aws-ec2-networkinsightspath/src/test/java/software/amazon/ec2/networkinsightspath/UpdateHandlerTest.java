@@ -123,12 +123,12 @@ public class UpdateHandlerTest extends AbstractTestBase {
     }
 
     @Test
-    public void addTagsGivenNoTagsExpectFunctionSuccess() {
+    public void addTagsGivenNoTagsExpectSuccess() {
         sut.addTags(arrangePathId(), Collections.emptyList(), client, proxy, logger);
     }
 
     @Test
-    public void deleteTagsGivenNoTagsExpectFunctionSuccess() {
+    public void deleteTagsGivenNoTagsExpectSuccess() {
         sut.deleteTags(arrangePathId(), Collections.emptyList(), client, proxy, logger);
     }
 }
