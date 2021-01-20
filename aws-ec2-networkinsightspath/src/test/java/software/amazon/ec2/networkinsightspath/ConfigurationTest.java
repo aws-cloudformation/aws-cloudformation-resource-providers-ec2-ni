@@ -8,7 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static software.amazon.ec2.networkinsightspath.PathFactory.arrangeFullResourceModel;
 import static software.amazon.ec2.networkinsightspath.PathFactory.arrangeResourceModel;
 
