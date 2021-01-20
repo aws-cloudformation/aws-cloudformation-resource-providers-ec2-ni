@@ -18,4 +18,3 @@ public class ClientBuilder {
             .build();
     }
 }
-
