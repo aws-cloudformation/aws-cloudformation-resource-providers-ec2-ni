@@ -103,6 +103,33 @@ public class UpdateHandlerTest extends AbstractTestBase {
     }
 
     @Test
+    public void handleRequestGivenNoTagsInResourceModelExpectSuccess() {
+        final String pathId = arrangePathId();
+        final ResourceModel model = arrangeResourceModel(pathId);
+        final ResourceHandlerRequest<ResourceModel> request = ResourceHandlerRequest.<ResourceModel>builder()
+                .previousResourceState(model)
+                .desiredResourceState(model)
+                .previousResourceTags(ImmutableMap.of())
+                .desiredResourceTags(ImmutableMap.of())
+                .build();
+        final DescribeNetworkInsightsPathsResponse describeResponse = DescribeNetworkInsightsPathsResponse.builder()
+                .build();
+        doReturn(describeResponse)
+                .when(client).describeNetworkInsightsPaths(any(DescribeNetworkInsightsPathsRequest.class));
+
+        final ProgressEvent<ResourceModel, CallbackContext> response = sut.handleRequest(proxy, request, client, logger);
+
+        verify(client).describeNetworkInsightsPaths(describePathCaptor.capture());
+        assertEquals(pathId, describePathCaptor.getValue().networkInsightsPathIds().get(0));
+        assertThat(response).isNotNull();
+        assertThat(response.getStatus()).isEqualTo(OperationStatus.SUCCESS);
+        assertThat(response.getCallbackDelaySeconds()).isEqualTo(0);
+        assertThat(response.getMessage()).isNull();
+        assertThat(response.getErrorCode()).isNull();
+        verifyNoMoreInteractions(client);
+    }
+
+    @Test
     public void handleRequestGivenEc2ThrowsExpectSuccess() {
         final ResourceModel model = PathFactory.arrangeResourceModel();
         final ResourceHandlerRequest<ResourceModel> request = ResourceHandlerRequest.<ResourceModel>builder()
